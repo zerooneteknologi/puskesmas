@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmergencyController;
 use App\Http\Controllers\PersonnelController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -16,3 +17,4 @@ Route::get('/home', [
 ])->name('home');
 
 Route::resource('personnel', PersonnelController::class);
+Route::resource('emergency', EmergencyController::class);
