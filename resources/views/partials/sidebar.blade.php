@@ -3,9 +3,16 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="index.html">
+            <a class="nav-link collapsed" href="{{ route('home')}}">
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('personnel.index')}}">
+                <i class="bi bi-people"></i>
+                <span>Staff</span>
             </a>
         </li><!-- End Dashboard Nav -->
 
