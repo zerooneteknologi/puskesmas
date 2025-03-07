@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActionController;
 use App\Http\Controllers\EmergencyController;
 use App\Http\Controllers\LaboratoryController;
+use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ToolController;
@@ -26,3 +27,4 @@ Route::resource('room', RoomController::class);
 Route::resource('laboratory', LaboratoryController::class);
 Route::resource('action', ActionController::class);
 Route::resource('tool', ToolController::class);
+Route::resource('medicine', MedicineController::class);
