@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             ActionSeeder::class,
             ToolSeeder::class,
             MedicineSeeder::class,
+            SuportSeeder::class,
         ]);
     }
 }
