@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ActionController;
 use App\Http\Controllers\EmergencyController;
+use App\Http\Controllers\LaboratoryController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +22,5 @@ Route::get('/home', [
 Route::resource('personnel', PersonnelController::class);
 Route::resource('emergency', EmergencyController::class);
 Route::resource('room', RoomController::class);
+Route::resource('laboratory', LaboratoryController::class);
+Route::resource('action', ActionController::class);

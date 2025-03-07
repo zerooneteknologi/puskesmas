@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             PersonnelSeeder::class,
             EmergencySeeder::class,
             RoomSeeder::class,
+            LaboratorySeeder::class,
+            ActionSeeder::class,
         ]);
     }
 }
