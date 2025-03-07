@@ -54,7 +54,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $medicine->medicine_name }}</td>
-                        <td>{{ $medicine->medicine_price }}</td>
+                        <td>Rp. {{ number_format($medicine->medicine_price, 2,",",".") }}</td>
                         <td>
                             <a href="{{ route('medicine.edit', $medicine->id)}}" data-bs-toggle="tooltip"
                                 data-bs-placement="top" title="Edit" class="badge bg-warning border-0"><i
@@ -106,10 +106,11 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="medicine_price" class="col-sm-2 col-form-label">Harga</label>
+                        <label for="numberInput" class="col-sm-2 col-form-label">Harga</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control @error('medicine_price') is-invalid @enderror"
-                                id="medicine_price" name="medicine_price">
+                            <input type="text" class="form-control @error('numberInput') is-invalid @enderror"
+                                id="numberInput" name="numberInput" required>
+                            <input type="hidden" id="medicine_price" name="medicine_price">
                             @error('medicine_price')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -141,5 +142,34 @@
         $('#medicine_price').val('');
         $('#medicineModal').modal('show');
     })
+
+    /**
+     * format number
+     */
+    const number = document.getElementById('medicine_price');
+    const input = document.getElementById('numberInput');
+    
+    input.addEventListener('input', function (e) {
+        // Ambil nilai input dan hapus semua karakter non-digit
+        let value = e.target.value.replace(/[^0-9]/g, '');
+        // number.value(value)
+        // Ubah string angka menjadi number
+        let numberValue = parseFloat(value);
+        
+        // Format angka dengan pemisah ribuan
+        let formattedValue = new Intl.NumberFormat().format(numberValue);
+        
+        // Set nilai input ke format yang sudah diformat
+        e.target.value = formattedValue;
+
+        let rawValue = input.value.replace(/[^0-9]/g, ''); // Hapus koma dan karakter non-digit
+
+        if (!rawValue || isNaN(rawValue)) {
+            alert('Input harus berupa angka!');
+            return; // Hentikan proses
+        }
+        let numberFormat = parseFloat(rawValue); // Konversi ke number
+        number.value = numberFormat;
+    });
 </script>
 @endpush

@@ -54,7 +54,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $laboratory->laboratory_name }}</td>
-                        <td>{{ $laboratory->laboratory_price }}</td>
+                        <td>Rp. {{ number_format($laboratory->laboratory_price,2,",",".") }}</td>
                         <td>
                             <a href="{{ route('laboratory.edit', $laboratory->id )}}" data-bs-toggle="tooltip"
                                 data-bs-placement="top" title="Edit" class="badge bg-warning border-0"><i
@@ -106,10 +106,11 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="laboratory_price" class="col-sm-2 col-form-label">Harga</label>
+                        <label for="numberInput" class="col-sm-2 col-form-label">Harga</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control @error('laboratory_price') is-invalid @enderror"
-                                id="laboratory_price" name="laboratory_price">
+                            <input type="text" class="form-control @error('numberInput') is-invalid @enderror"
+                                id="numberInput" name="numberInput" required>
+                            <input type="hidden" id="laboratory_price" name="laboratory_price">
                             @error('laboratory_price')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -143,15 +144,32 @@
     })
 
     /**
-    * show modal edit
+    * format number
     */
-    function edit(id, laboratory_name, laboratory_price) {
-        $('.modal-title').html('Edit perawtan UGD');
-        $('.modal-form').attr('action', "/laboratory/" + id);
-        $('.method').val('PUT');
-        $('#laboratory_name').val(laboratory_name);
-        $('#laboratory_price').val(laboratory_price);
-        $('#laboratoryModal').modal('show');
+    const number = document.getElementById('laboratory_price');
+    const input = document.getElementById('numberInput');
+    
+    input.addEventListener('input', function (e) {
+    // Ambil nilai input dan hapus semua karakter non-digit
+    let value = e.target.value.replace(/[^0-9]/g, '');
+    // number.value(value)
+    // Ubah string angka menjadi number
+    let numberValue = parseFloat(value);
+    
+    // Format angka dengan pemisah ribuan
+    let formattedValue = new Intl.NumberFormat().format(numberValue);
+    
+    // Set nilai input ke format yang sudah diformat
+    e.target.value = formattedValue;
+    
+    let rawValue = input.value.replace(/[^0-9]/g, ''); // Hapus koma dan karakter non-digit
+    
+    if (!rawValue || isNaN(rawValue)) {
+    alert('Input harus berupa angka!');
+    return; // Hentikan proses
     }
+    let numberFormat = parseFloat(rawValue); // Konversi ke number
+    number.value = numberFormat;
+    });
 </script>
 @endpush

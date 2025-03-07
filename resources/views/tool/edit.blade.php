@@ -36,10 +36,12 @@
                 </div>
 
                 <div class="row mb-3">
-                    <label for="tool_price" class="col-sm-2 col-form-label">Harga</label>
+                    <label for="numberInput" class="col-sm-2 col-form-label">Harga</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control @error('tool_price') is-invalid @enderror"
-                            id="tool_price" name="tool_price" value="{{ old('tool_price', $tool->tool_price)}}">
+                        <input type="text" class="form-control @error('numberInput') is-invalid @enderror"
+                            id="numberInput" name="numberInput"
+                            value="{{ old('numberInput', number_format($tool->tool_price))}}">
+                        <input type="hidden" id="tool_price" name="tool_price" value="{{ $tool->tool_price }}">
                         @error('tool_price')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -55,3 +57,36 @@
 </section>
 
 @endsection
+
+@push('script')
+<script>
+    /**
+     * format number
+     */
+    const number = document.getElementById('tool_price');
+    const input = document.getElementById('numberInput');
+    
+    input.addEventListener('input', function (e) {
+        // Ambil nilai input dan hapus semua karakter non-digit
+        let value = e.target.value.replace(/[^0-9]/g, '');
+        // number.value(value)
+        // Ubah string angka menjadi number
+        let numberValue = parseFloat(value);
+        
+        // Format angka dengan pemisah ribuan
+        let formattedValue = new Intl.NumberFormat().format(numberValue);
+        
+        // Set nilai input ke format yang sudah diformat
+        e.target.value = formattedValue;
+
+        let rawValue = input.value.replace(/[^0-9]/g, ''); // Hapus koma dan karakter non-digit
+
+        if (!rawValue || isNaN(rawValue)) {
+            alert('Input harus berupa angka!');
+            return; // Hentikan proses
+        }
+        let numberFormat = parseFloat(rawValue); // Konversi ke number
+        number.value = numberFormat;
+    });
+</script>
+@endpush
