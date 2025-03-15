@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActionController;
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\EmergencyController;
 use App\Http\Controllers\LaboratoryController;
 use App\Http\Controllers\MedicineController;
@@ -32,3 +33,5 @@ Route::resource('tool', ToolController::class);
 Route::resource('medicine', MedicineController::class);
 Route::resource('suport', SuportController::class);
 Route::resource('note', NoteController::class);
+Route::resource('bill', BillController::class);
+Route::post('bill/emergency', [BillController::class, 'emergency']);

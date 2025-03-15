@@ -52,8 +52,12 @@
             <td>{{ $emergency->emergency_name }}</td>
             <td>Rp. {{ number_format($emergency->emergency_price,2,",",".") }}</td>
             <td>
-                <a href="{{ route('emergency.edit', $emergency->id)}}" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Tambah" class="badge bg-info border-0"><i class="bi bi-plus-square me-1"></i></a>
+                <button
+                    onclick="emergency({{request()->category}}, '{{ $emergency->emergency_name}}', '{{ $emergency->emergency_price}}')"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah" class="badge bg-info border-0"><i
+                        class="bi bi-plus-square me-1"></i></button>
+                <span data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah"
+                    class="badge bg-success border-0 d-none"><i class="bi bi-check2-circle me-1"></i></span>
             </td>
         </tr>
         @endforeach
@@ -66,8 +70,9 @@
             <td>{{ $room->room_name }}</td>
             <td>Rp. {{ number_format($room->room_price,2,",",".") }}</td>
             <td>
-                <a href="{{ route('room.edit', $room->id)}}" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Tambah" class="badge bg-info border-0"><i class="bi bi-plus-square me-1"></i></a>
+                <button onclick="emergency({{request()->category}}, '{{ $room->room_name}}', '{{ $room->room_price}}')"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah" class="badge bg-info border-0"><i
+                        class="bi bi-plus-square me-1"></i></button>
             </td>
         </tr>
         @endforeach
@@ -80,9 +85,10 @@
             <td>{{ $laboratory->laboratory_name }}</td>
             <td>Rp. {{ number_format($laboratory->laboratory_price,2,",",".") }}</td>
             <td>
-                <a href="{{ route('laboratory.edit', $laboratory->id)}}" data-bs-toggle="tooltip"
-                    data-bs-placement="top" title="Tambah" class="badge bg-info border-0"><i
-                        class="bi bi-plus-square me-1"></i></a>
+                <button
+                    onclick="emergency({{request()->category}}, '{{ $laboratory->laboratory_name}}', '{{ $laboratory->laboratory_price}}')"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah" class="badge bg-info border-0"><i
+                        class="bi bi-plus-square me-1"></i></button>
             </td>
         </tr>
         @endforeach
@@ -95,8 +101,10 @@
             <td>{{ $action->action_name }}</td>
             <td>Rp. {{ number_format($action->action_price,2,",",".") }}</td>
             <td>
-                <a href="{{ route('action.edit', $action->id)}}" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Tambah" class="badge bg-info border-0"><i class="bi bi-plus-square me-1"></i></a>
+                <button
+                    onclick="emergency({{request()->category}}, '{{ $action->action_name}}', '{{ $action->action_price}}')"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah" class="badge bg-info border-0"><i
+                        class="bi bi-plus-square me-1"></i></button>
             </td>
         </tr>
         @endforeach
@@ -109,8 +117,10 @@
             <td>{{ $suport->suport_name }}</td>
             <td>Rp. {{ number_format($suport->suport_price,2,",",".") }}</td>
             <td>
-                <a href="{{ route('suport.edit', $suport->id)}}" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Tambah" class="badge bg-info border-0"><i class="bi bi-plus-square me-1"></i></a>
+                <button
+                    onclick="emergency({{request()->category}}, '{{ $suport->suport_name}}', '{{ $suport->suport_price}}')"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah" class="badge bg-info border-0"><i
+                        class="bi bi-plus-square me-1"></i></button>
             </td>
         </tr>
         @endforeach
@@ -123,8 +133,9 @@
             <td>{{ $tool->tool_name }}</td>
             <td>Rp. {{ number_format($tool->tool_price,2,",",".") }}</td>
             <td>
-                <a href="{{ route('tool.edit', $tool->id)}}" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Tambah" class="badge bg-info border-0"><i class="bi bi-plus-square me-1"></i></a>
+                <button onclick="emergency({{request()->category}}, '{{ $tool->tool_name}}', '{{ $tool->tool_price}}')"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah" class="badge bg-info border-0"><i
+                        class="bi bi-plus-square me-1"></i></button>
             </td>
         </tr>
         @endforeach
@@ -137,8 +148,10 @@
             <td>{{ $medicine->medicine_name }}</td>
             <td>Rp. {{ number_format($medicine->medicine_price,2,",",".") }}</td>
             <td>
-                <a href="{{ route('medicine.edit', $medicine->id)}}" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Tambah" class="badge bg-info border-0"><i class="bi bi-plus-square me-1"></i></a>
+                <button
+                    onclick="emergency({{request()->category}}, '{{ $medicine->medicine_name}}', '{{ $medicine->medicine_price}}')"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah" class="badge bg-info border-0"><i
+                        class="bi bi-plus-square me-1"></i></button>
             </td>
         </tr>
         @endforeach

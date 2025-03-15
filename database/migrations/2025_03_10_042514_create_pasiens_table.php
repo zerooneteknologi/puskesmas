@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('pasiens', function (Blueprint $table) {
             $table->id();
-            $table->integer('pasien_nomor');
+            $table->string('pasien_nomor')->unique();
             $table->string('pasien_name');
             $table->integer('pasien_age');
             $table->text('pasien_address');
@@ -20,8 +20,8 @@ return new class extends Migration {
             $table->date('pasien_in');
             $table->date('pasien_out')->nullable();
             $table->integer('pasien_sum')->nullable();
-            $table->integer('pasien_room')->nullable();
-            $table->integer('pasien_diagnoses')->nullable();
+            $table->string('pasien_room')->nullable();
+            $table->string('pasien_diagnoses')->nullable();
             $table->timestamps();
         });
     }

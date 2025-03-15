@@ -71,7 +71,7 @@
 
         <li class="nav-heading">Buat Nota</li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('personnel/*') ? '' : 'collapsed'}}" href="{{ route('suport.index')}}">
+            <a class="nav-link {{ request()->is('note') ? '' : 'collapsed'}}" href="{{ route('note.index')}}?unit=A">
                 <i class="bi bi-clipboard2-pulse"></i>
                 <span>Rawat Jalan</span>
             </a>

@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Action;
+use App\Models\Bill;
 use App\Models\Emergency;
 use App\Models\Laboratory;
 use App\Models\Medicine;
 use App\Models\Note;
+use App\Models\Pasien;
 use App\Models\Room;
 use App\Models\Suport;
 use App\Models\Tool;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NoteController extends Controller
 {
@@ -43,7 +47,39 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $unit = strtoupper($request->note_unit);
+        $no = Pasien::whereYear('created_at', now('y'))->count() + 1;
+        $nomor =
+            $unit .
+            str_pad($no, 3, '0', STR_PAD_LEFT) .
+            '/' .
+            Carbon::now()->year;
+
+        $pasienId = Pasien::insertGetId([
+            'pasien_nomor' => $nomor,
+            'pasien_name' => $request->pasien_name,
+            'pasien_age' => $request->pasien_age,
+            'pasien_address' => $request->pasien_address,
+            'pasien_status' => $request->pasien_status,
+            'pasien_in' => $request->pasien_in,
+            'pasien_out' => $request->pasien_out,
+            'pasien_sum' => $request->pasien_sum,
+            'pasien_room' => $request->pasien_room,
+            'pasien_diagnoses' => $request->pasien_diagnoses,
+            'created_at' => now(),
+        ]);
+
+        foreach ($request->note_category as $key => $cartegory) {
+            Note::create([
+                'pasien_id' => $pasienId,
+                'note_category' => $cartegory,
+                'note_name' => $request->note_name[$key],
+                'note_price' => $request->note_price[$key],
+                'created_at' => now(),
+            ]);
+        }
+
+        DB::table('bills')->truncate();
     }
 
     /**
