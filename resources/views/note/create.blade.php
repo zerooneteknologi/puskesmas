@@ -22,7 +22,7 @@
                 number_format($bill->bill_price,2,",",".") }}
             </td>
             <td>
-                <button
+                <button type="button"
                     onclick="removeBill({{ $bill->id }}, {{request()->category}}, '{{ $bill->bill_name}}', '{{ $bill->bill_price}}')"
                     class="badge bg-danger  border-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus">
                     <i class="bi bi-trash"></i></button>

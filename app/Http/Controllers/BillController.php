@@ -9,10 +9,29 @@ use App\Models\Medicine;
 use App\Models\Room;
 use App\Models\Suport;
 use App\Models\Tool;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class BillController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        // return view('pdf.note');
+        $pdf = PDF::loadView('pdf.note');
+        return $pdf->stream('invoice.pdf');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(Request $request)
+    {
+        //
+    }
+
     /**
      * Store a newly created resource in storage.
      */

@@ -112,7 +112,11 @@
                     </div>
                     <div class="col-md-6">
                         <div class="row mb-3">
+                            @if (request()->unit == 'd')
+                            <label for="pasien_in" class="form-label col-md-4">Tanggal berobat</label>
+                            @else
                             <label for="pasien_in" class="form-label col-md-4">Tanggal Dirawat</label>
+                            @endif
                             <div class="col-md-8">
                                 <input type="date" class="form-control @error('pasien_in') is-invalid @enderror"
                                     id="pasien_in" name="pasien_in" required>
@@ -123,6 +127,7 @@
                             </div>
                         </div>
 
+                        @if (request()->unit != 'd')
                         <div class="row mb-3">
                             <label for="pasien_out" class="form-label col-md-4">Tanggal Keluar</label>
                             <div class="col-md-8">
@@ -158,7 +163,9 @@
                                 @enderror
                             </div>
                         </div>
+                        @endif
 
+                        @if (request()->unit == 'd')
                         <div class="row mb-3">
                             <label for="pasien_diagnoses" class="form-label col-md-4">Diagnosa</label>
                             <div class="col-md-8">
@@ -170,12 +177,14 @@
                                 @enderror
                             </div>
                         </div>
+                        @endif
 
                     </div>
                 </div>
             </div>
         </div>
 
+        @if (request()->unit != 'c')
         <div class="card">
             <div class="card-body">
 
@@ -213,7 +222,9 @@
 
             </div>
         </div>
+        @endif
 
+        @if (request()->unit != 'd')
         <div class="card">
             <div class="card-body">
 
@@ -252,6 +263,7 @@
 
             </div>
         </div>
+        @endif
 
         <div class="card">
             <div class="card-body">
@@ -292,6 +304,49 @@
 
             </div>
         </div>
+
+        @if (request()->unit == 'c')
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-6">
+                        <h5 class="card-title">Tindakan Kebidanan</h5>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="btn btn-secondary float-end mt-3" onclick="add(8)">
+                            <i class="bi bi-plus me-1"></i> Tambah
+                        </button>
+                    </div>
+                </div>
+
+                <div id="action">
+                    <!-- Table with stripped rows -->
+                    <table class="table datatable table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    No
+                                </th>
+                                <th>Nama</th>
+                                <th>Harga</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <!-- End Table with stripped rows -->
+
+                    <div class="row">
+                        <span class="text-bold col-md-6"><strong>Jumlah</strong></span>
+                        <span class="col-md-6 text-end"><strong>Rp. {{ number_format(0)}}</strong></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        @endif
 
         <div class="card">
             <div class="card-body">
@@ -334,6 +389,7 @@
             </div>
         </div>
 
+        @if (request()->unit == 'd')
         <div class="card">
             <div class="card-body">
 
@@ -373,6 +429,7 @@
 
             </div>
         </div>
+        @endif
 
         <div class="card">
             <div class="card-body">
@@ -530,7 +587,7 @@
 @push('script')
 <script>
     /**
-    * show modal create
+    * show modal create tabel rincian
     */
     function add(category) {
         $('#spinner').css('display', 'flex');
@@ -604,13 +661,78 @@
         })
     }
 
-    $('#save').on('click', function() {
-        $('#spinner').css('display', 'flex');
-        $.post("{{ route('note.store')}}", $('form').serialize(), function() {
-            $('#save').prop('disabled', true);
-            $('#spinner').css('display', 'none');
-            alert("invoice berhail dibuat");
-        })
+    $('#save').on('click', function(e) {
+        if (!validasiForm()) {
+            e.preventDefault(); // Mencegah pengiriman form jika validasi gagal
+        } else {
+            $('#spinner').css('display', 'flex');
+            $.post("{{ route('note.store')}}", $('form').serialize(), function() {
+                $('#save').prop('disabled', true);
+                $('#spinner').css('display', 'none');
+                alert("invoice berhail dibuat");
+            })
+        }
     })
+
+    function validasiForm() {
+    let fields = [
+    { id: '#pasien_name', pesan: 'Nama pasien mohon diisi' },
+    { id: '#pasien_age', pesan: 'Umur pasien mohon diisi' },
+    { id: '#pasien_address', pesan: 'Alamat pasien mohon diisi' },
+    { id: '#pasien_status', pesan: 'Status pasien mohon dipilih', isSelect: true }, // Tambahkan flag isSelect
+    { id: '#pasien_in', pesan: 'Tanggal Masuk mohon diisi' },
+    { id: '#pasien_out', pesan: 'Tanggal Keluar mohon diisi' },
+    { id: '#pasien_sum', pesan: 'JUmlah HP mohon diisi' },
+    { id: '#pasien_room', pesan: 'Ruangan pasien mohon diisi' },
+    { id: '#pasien_diagnoses', pesan: 'Diagnosa pasien mohon diisi' }
+    ];
+    
+    let errors = []; // Untuk menyimpan pesan error
+    let fieldKosongPertama = null; // Untuk menyimpan field pertama yang kosong
+    
+    fields.forEach(field => {
+    let element = $(field.id); // Ambil elemen dari DOM
+    if (element.length === 0) {
+    // Jika elemen tidak ditemukan, lewati validasi untuk field ini
+    console.log(`Element dengan ID ${field.id} tidak ditemukan di DOM.`);
+    return;
+    }
+    
+    let value = element.val(); // Ambil nilai dari elemen
+    if (field.isSelect) {
+    // Jika elemen adalah <select>, cek apakah nilai default (kosong) dipilih
+        if (value === '' || value === null) {
+        errors.push(field.pesan); // Tambahkan pesan error jika tidak ada pilihan
+        element.addClass('is-invalid'); // Tandai select sebagai invalid
+        if (!fieldKosongPertama) {
+        fieldKosongPertama = field.id; // Simpan field pertama yang kosong
+        }
+        } else {
+        element.removeClass('is-invalid'); // Hapus tanda invalid jika valid
+        }
+        } else {
+        // Jika elemen adalah input, cek apakah kosong
+        if (value === null || value === undefined || value.trim() === '') {
+        errors.push(field.pesan); // Tambahkan pesan error jika field kosong
+        element.addClass('is-invalid'); // Tandai field sebagai invalid
+        if (!fieldKosongPertama) {
+        fieldKosongPertama = field.id; // Simpan field pertama yang kosong
+        }
+        } else {
+        element.removeClass('is-invalid'); // Hapus tanda invalid jika field terisi
+        }
+        }
+        });
+    
+        if (errors.length > 0) {
+        alert(errors.join('\n')); // Tampilkan semua pesan error dalam satu alert
+        if (fieldKosongPertama) {
+        $(fieldKosongPertama).focus(); // Fokuskan ke field pertama yang kosong
+        }
+        return false; // Mencegah pengiriman form jika ada error
+        }
+    
+        return true; // Izinkan pengiriman form jika semua field valid
+        }
 </script>
 @endpush

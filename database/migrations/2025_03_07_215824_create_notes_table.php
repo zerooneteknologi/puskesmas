@@ -23,7 +23,7 @@ return new class extends Migration {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Pasien::class);
-            $table->enum('note_category', [1, 2, 3, 4, 5, 6, 7]);
+            $table->enum('note_category', [1, 2, 3, 4, 5, 6, 7, 8]);
             $table->string('note_name');
             $table->integer('note_price');
             $table->timestamps();

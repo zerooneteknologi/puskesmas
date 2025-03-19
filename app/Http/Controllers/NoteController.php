@@ -35,7 +35,8 @@ class NoteController extends Controller
             'emergencies' => Emergency::all(),
             'rooms' => Room::all(),
             'laboratories' => Laboratory::all(),
-            'actions' => Action::all(),
+            'actions' => Action::where('action_category', 1)->get(),
+            'midwives' => Action::where('action_category', 2)->get(),
             'suports' => Suport::all(),
             'tools' => Tool::all(),
             'medicines' => Medicine::all(),
@@ -48,7 +49,10 @@ class NoteController extends Controller
     public function store(Request $request)
     {
         $unit = strtoupper($request->note_unit);
-        $no = Pasien::whereYear('created_at', now('y'))->count() + 1;
+        $no =
+            Pasien::whereYear('created_at', now('y'))
+                ->where('pasien_nomor', 'LIKE', "%$request->note_unit%")
+                ->count() + 1;
         $nomor =
             $unit .
             str_pad($no, 3, '0', STR_PAD_LEFT) .

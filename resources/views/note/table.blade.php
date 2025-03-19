@@ -157,6 +157,22 @@
         @endforeach
         @endif
 
+        @if (request()->category == 8)
+        @foreach ($midwives as $action)
+        <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ $action->action_name }}</td>
+            <td>Rp. {{ number_format($action->action_price,2,",",".") }}</td>
+            <td>
+                <button
+                    onclick="emergency({{request()->category}}, '{{ $action->action_name}}', '{{ $action->action_price}}')"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah" class="badge bg-info border-0"><i
+                        class="bi bi-plus-square me-1"></i></button>
+            </td>
+        </tr>
+        @endforeach
+        @endif
+
     </tbody>
 </table>
 <!-- End Table with stripped rows -->

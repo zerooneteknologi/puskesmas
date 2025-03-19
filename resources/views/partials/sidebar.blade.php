@@ -71,28 +71,32 @@
 
         <li class="nav-heading">Buat Nota</li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('note') ? '' : 'collapsed'}}" href="{{ route('note.index')}}?unit=A">
+            <a class="nav-link {{ request()->is('note') && request()->query('unit') === 'a' ? '' : 'collapsed' }}"
+                href="{{ route('note.index')}}?unit=a">
                 <i class="bi bi-clipboard2-pulse"></i>
                 <span>Rawat Jalan</span>
             </a>
         </li><!-- End suport Nav -->
 
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('personnel/*') ? '' : 'collapsed'}}" href="{{ route('suport.index')}}">
+            <a class="nav-link {{ request()->is('note') && request()->query('unit') === 'b' ? '' : 'collapsed' }}"
+                href="{{ route('note.index')}}?unit=b">
                 <i class="bi bi-building"></i>
                 <span>Rawat Inap</span>
             </a>
         </li><!-- End suport Nav -->
 
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('personnel/*') ? '' : 'collapsed'}}" href="{{ route('suport.index')}}">
+            <a class="nav-link {{ request()->is('note') && request()->query('unit') === 'c' ? '' : 'collapsed' }}"
+                href="{{ route('note.index')}}?unit=c">
                 <i class="bi bi-person-gear"></i>
                 <span>Bidan</span>
             </a>
         </li><!-- End suport Nav -->
 
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('personnel/*') ? '' : 'collapsed'}}" href="{{ route('suport.index')}}">
+            <a class="nav-link {{ request()->is('note') && request()->query('unit') === 'd' ? '' : 'collapsed' }}"
+                href="{{ route('note.index')}}?unit=d">
                 <i class="bi bi-hospital"></i>
                 <span>UGD</span>
             </a>
