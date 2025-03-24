@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pasien;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class PasienController extends Controller
@@ -12,7 +13,7 @@ class PasienController extends Controller
      */
     public function index()
     {
-        //
+        return view('pasien.index');
     }
 
     /**
@@ -36,7 +37,29 @@ class PasienController extends Controller
      */
     public function show(Pasien $pasien)
     {
-        //
+        // render view
+        return view('pdf.note', [
+            'pasien' => $pasien->load('notes'),
+        ]);
+        $receiptPdf = view('pdf.receipt', [
+            'pasien' => $pasien->load('notes'),
+        ]);
+        $notePdf = view('pdf.note', [
+            'pasien' => $pasien->load('notes'),
+        ]);
+
+        // gabung pdf
+        $combinePdf =
+            $notePdf .
+            '<div style="page-break-after: always;"></div>' .
+            $receiptPdf;
+
+        // render pdf
+        // return view($combinePdf);
+        $pdf = PDF::loadView('pdf.note', [
+            'pasien' => $pasien->load('notes'),
+        ]);
+        return $pdf->setPaper('f4')->stream('invoice.pdf');
     }
 
     /**

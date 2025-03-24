@@ -19,7 +19,7 @@ class BillController extends Controller
      */
     public function index()
     {
-        // return view('pdf.note');
+        return view('pdf.note', []);
         $pdf = PDF::loadView('pdf.note');
         return $pdf->stream('invoice.pdf');
     }

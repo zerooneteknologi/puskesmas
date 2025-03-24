@@ -9,4 +9,9 @@ class Note extends Model
     /** @use HasFactory<\Database\Factories\PersonnelFactory> */
 
     protected $guarded = [''];
+
+    public function pasien()
+    {
+        return $this->belongsTo(Note::class);
+    }
 }

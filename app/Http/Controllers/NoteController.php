@@ -84,6 +84,8 @@ class NoteController extends Controller
         }
 
         DB::table('bills')->truncate();
+
+        return $pasienId;
     }
 
     /**

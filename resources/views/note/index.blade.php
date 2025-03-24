@@ -518,6 +518,8 @@
 
                 <div class="col-12">
                     <button class="btn btn-primary" type="button" id="save">Simpan</button>
+                    <a href="" class="btn btn-success d-none" id="print" target="blank"><i
+                            class="bi bi-printer"></i></a>
                 </div>
             </div>
         </div>
@@ -661,15 +663,20 @@
         })
     }
 
+    
     $('#save').on('click', function(e) {
         if (!validasiForm()) {
             e.preventDefault(); // Mencegah pengiriman form jika validasi gagal
         } else {
             $('#spinner').css('display', 'flex');
-            $.post("{{ route('note.store')}}", $('form').serialize(), function() {
+            $.post("{{ route('note.store')}}", $('form').serialize(), function(e) {
                 $('#save').prop('disabled', true);
                 $('#spinner').css('display', 'none');
                 alert("invoice berhail dibuat");
+                let pasienId;
+                pasienId = e;
+                $('#print').removeClass('d-none');
+                $('#print').attr('href', "/pasien/" + pasienId);
             })
         }
     })
@@ -694,7 +701,7 @@
     let element = $(field.id); // Ambil elemen dari DOM
     if (element.length === 0) {
     // Jika elemen tidak ditemukan, lewati validasi untuk field ini
-    console.log(`Element dengan ID ${field.id} tidak ditemukan di DOM.`);
+    // console.log(`Element dengan ID ${field.id} tidak ditemukan di DOM.`);
     return;
     }
     
