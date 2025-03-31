@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->integer('pasien_sum')->nullable();
             $table->string('pasien_room')->nullable();
             $table->string('pasien_diagnoses')->nullable();
+            $table->integer('pasien_discount')->nullable();
             $table->timestamps();
         });
     }

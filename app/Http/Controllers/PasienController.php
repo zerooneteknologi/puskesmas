@@ -13,7 +13,9 @@ class PasienController extends Controller
      */
     public function index()
     {
-        return view('pasien.index');
+        return view('pasien.index', [
+            'pasiens' => Pasien::all()->load('notes'),
+        ]);
     }
 
     /**
@@ -21,7 +23,9 @@ class PasienController extends Controller
      */
     public function create()
     {
-        //
+        return view('pasien.table', [
+            'pasiens' => Pasien::all()->load('notes'),
+        ]);
     }
 
     /**
@@ -41,25 +45,6 @@ class PasienController extends Controller
         return view('pdf.note', [
             'pasien' => $pasien->load('notes'),
         ]);
-        $receiptPdf = view('pdf.receipt', [
-            'pasien' => $pasien->load('notes'),
-        ]);
-        $notePdf = view('pdf.note', [
-            'pasien' => $pasien->load('notes'),
-        ]);
-
-        // gabung pdf
-        $combinePdf =
-            $notePdf .
-            '<div style="page-break-after: always;"></div>' .
-            $receiptPdf;
-
-        // render pdf
-        // return view($combinePdf);
-        $pdf = PDF::loadView('pdf.note', [
-            'pasien' => $pasien->load('notes'),
-        ]);
-        return $pdf->setPaper('f4')->stream('invoice.pdf');
     }
 
     /**
@@ -75,7 +60,23 @@ class PasienController extends Controller
      */
     public function update(Request $request, Pasien $pasien)
     {
-        //
+        $validatedata = $request->validate([
+            'pasien_nomor' => '',
+            'pasien_name' => '',
+            'pasien_age' => '',
+            'pasien_address' => '',
+            'pasien_status' => '',
+            'pasien_in' => '',
+            'pasien_out' => '',
+            'pasien_sum' => '',
+            'pasien_room' => '',
+            'pasien_diagnoses' => '',
+            'pasien_discount' => '',
+        ]);
+
+        $pasien->update($validatedata);
+
+        return redirect()->route('pasien.show', $pasien->id);
     }
 
     /**

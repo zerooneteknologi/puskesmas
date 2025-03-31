@@ -223,8 +223,20 @@
                 @endforeach
                 @endforeach
                 <tr>
-                    <th colspan="2" style="text-align: center">Total Seluruh</th>
+                    <th colspan="2" style="text-align: right">Jumlah</th>
                     <th>Rp. {{ number_format($pasien->notes->sum('note_price'), 2, ",",".")}}</th>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right">Diskon (%)</td>
+                    <td>{{ $pasien->pasien_discount}}</td>
+                </tr>
+                @php
+                $price = $pasien->notes->sum('note_price') - ($pasien->notes->sum('note_price') *
+                $pasien->pasien_discount /100);
+                @endphp
+                <tr>
+                    <th colspan="2" style="text-align: right">Total</th>
+                    <th>Rp. {{ number_format($price, 2, ",",".") }}</th>
                 </tr>
             </table>
         </div>
@@ -368,8 +380,16 @@
                     <th>Rp. {{ number_format($pasien->notes->sum('note_price'), 2, ",",".")}}</th>
                 </tr>
                 <tr>
-                    <td>Terbilang</td>
-                    <td colspan="2"><em>{{ terbilang($pasien->notes->sum('note_price'))}}</em></td>
+                    <td colspan="2" style="text-align: right">Diskon (%)</td>
+                    <td>{{ $pasien->pasien_discount}}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right">Total</td>
+                    <th>Rp. {{ number_format($price, 2, ",",".") }}</th>
+                </tr>
+                <tr>
+                    <th style="border: none">Terbilang</th>
+                    <th style="border: none" colspan="2"><em>{{ terbilang($price)}} rupiah</em></th>
                 </tr>
             </table>
         </div>
