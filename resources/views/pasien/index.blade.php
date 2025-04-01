@@ -29,6 +29,49 @@
 
             <h5 class="card-title">Daftar Pasien</h5>
 
+            <form action="" method="GET" id="form">
+                @csrf
+                <div class="row mt-3">
+                    <label for="filter" class="form-label col-md-2"><i class="bi bi-filter"></i> Filter</label>
+                    <div class="col-md-4 mb-3">
+                        <select class="form-select" id="filter" name="filter" required>
+                            <option selected disabled value="">Pilih jenis filter</option>
+                            <option value="1">Harian</option>
+                            <option value="2">Bulanan</option>
+                            <option value="3">Tahunan</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 row" style=" display: none" id="filterDate">
+                        <label for="date" class="form-label col-md-4">Harian</label>
+                        <div class="col-md-8">
+                            <input type="date" class="form-control" id="date" name="date" value="{{ request('date') }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6 row" style=" display: none" id="filterMonth">
+                        <label for="month" class="form-label col-md-4">Bulanan</label>
+                        <div class="col-md-8">
+                            <input type="month" name="month" id="month" class="form-control"
+                                value="{{ request('month') }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6 row" style=" display: none" id="filterYear">
+                        <label for="year" class="form-label col-md-4">Tahunan</label>
+                        <div class="col-md-8">
+                            <select name="year" id="year" name="year" class="form-control">
+                                <option value="">Pilih Tahun</option>
+                                @for ($year = date('Y'); $year >= 2024; $year--)
+                                <option value="{{ $year }}" {{ request('year')==$year ? 'selected' : '' }}>
+                                    {{ $year }}
+                                </option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div id="tableTapsien">
             <!-- Table with stripped rows -->
             <table class="table datatable table-hover">
                 <thead>
@@ -71,15 +114,13 @@
                 </tbody>
             </table>
             <!-- End Table with stripped rows -->
-
         </div>
+
+    </div>
     </div>
 </section>
 
 <!-- Vertically centered Modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered">
-    Vertically centered
-</button>
 <div class="modal fade" id="modaldiscount" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -92,72 +133,17 @@
                 <form action="{{ route('pasien.update', $pasien->id)}}" method="POST">
                     @csrf
                     <input type="hidden" name="_method" value="PUT">
-                    <div class="row mb-3">
-                        <label for="pasien_id" class="col-sm-2 col-form-label">id Pasien</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pasien_id" name="pasien_id">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="pasien_nomor" class="col-sm-2 col-form-label">Nomor Pasien</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pasien_nomor" name="pasien_nomor">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="pasien_name" class="col-sm-2 col-form-label">Nama Pasien</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pasien_name" name="pasien_name">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="pasien_age" class="col-sm-2 col-form-label">Umur Pasien</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pasien_age" name="pasien_age">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="pasien_address" class="col-sm-2 col-form-label">Alamat Pasien</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pasien_address" name="pasien_address">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="pasien_status" class="col-sm-2 col-form-label">Status Pasien</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pasien_status" name="pasien_status">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="pasien_in" class="col-sm-2 col-form-label">Masuk Pasien</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pasien_in" name="pasien_in">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="pasien_out" class="col-sm-2 col-form-label">Keluar Pasien</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pasien_out" name="pasien_out">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="pasien_sum" class="col-sm-2 col-form-label">Jumlah HP</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pasien_sum" name="pasien_sum">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="pasien_room" class="col-sm-2 col-form-label">Ruangan</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pasien_room" name="pasien_room">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="pasien_diagnoses" class="col-sm-2 col-form-label">Diagnosa</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pasien_diagnoses" name="pasien_diagnoses">
-                        </div>
-                    </div>
+                    <input type="hidden" class="form-control" id="pasien_id" name="pasien_id">
+                    <input type="hidden" class="form-control" id="pasien_nomor" name="pasien_nomor">
+                    <input type="hidden" class="form-control" id="pasien_name" name="pasien_name">
+                    <input type="hidden" class="form-control" id="pasien_age" name="pasien_age">
+                    <input type="hidden" class="form-control" id="pasien_address" name="pasien_address">
+                    <input type="hidden" class="form-control" id="pasien_status" name="pasien_status">
+                    <input type="hidden" class="form-control" id="pasien_in" name="pasien_in">
+                    <input type="hidden" class="form-control" id="pasien_out" name="pasien_out">
+                    <input type="hidden" class="form-control" id="pasien_sum" name="pasien_sum">
+                    <input type="hidden" class="form-control" id="pasien_room" name="pasien_room">
+                    <input type="hidden" class="form-control" id="pasien_diagnoses" name="pasien_diagnoses">
                     <div class="row mb-3">
                         <label for="pasien_discount" class="col-sm-2 col-form-label">Diskon</label>
                         <div class="col-sm-10">
@@ -165,15 +151,13 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="reset" class="btn btn-secondary">Reset</button>
                     </div>
-                </form><!-- End Horizontal Form -->
             </div>
             <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Tambah diskon</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
+            </form><!-- End Horizontal Form -->
         </div>
     </div>
 </div><!-- End Vertically centered Modal-->
@@ -197,5 +181,40 @@
             $('#pasien_discount').val(discount);
             $('#modaldiscount').modal('show');
         }
+
+    $('#filter').on('change', function() {
+        $('#filterDate').css('display', 'none');
+        $('#filterMonth').css('display', 'none');
+        $('#filterYear').css('display', 'none');
+        const selectedFilter = $('#filter').val();
+        switch(selectedFilter) {
+        case '1':
+        $('#filterDate').css('display', 'flex');
+        break;
+        case '2':
+        $('#filterMonth').css('display', 'flex');
+        break;
+        case '3':
+        $('#filterYear').css('display', 'flex');
+        break;
+        }
+    })
+
+    function filter() {
+        $.get('/filter', $('#form').serialize() , function(e) {
+        $('#tableTapsien').html(e)
+        })
+    }
+    
+
+    $('#date').on('change', function(data) {
+        filter()
+    })
+    $('#month').on('change', function() {
+        filter()
+    })
+    $('#year').on('change', function() {
+        filter()
+    })
 </script>
 @endpush

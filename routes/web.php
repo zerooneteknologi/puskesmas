@@ -37,3 +37,4 @@ Route::resource('note', NoteController::class);
 Route::resource('bill', BillController::class);
 Route::post('bill/emergency', [BillController::class, 'emergency']);
 Route::resource('pasien', PasienController::class);
+Route::get('filter', [PasienController::class, 'filter']);

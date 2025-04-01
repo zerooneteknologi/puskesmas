@@ -13,9 +13,8 @@ class PasienController extends Controller
      */
     public function index()
     {
-        return view('pasien.index', [
-            'pasiens' => Pasien::all()->load('notes'),
-        ]);
+        $pasiens = Pasien::all()->load('notes');
+        return view('pasien.index', compact('pasiens'));
     }
 
     /**
@@ -85,5 +84,32 @@ class PasienController extends Controller
     public function destroy(Pasien $pasien)
     {
         //
+    }
+
+    /**
+     * filter listing form storage
+     */
+    public function filter(Request $request)
+    {
+        $pasiens = [];
+        if ($request->filter == 1) {
+            $pasiens = Pasien::whereDate('created_at', $request->date)->get();
+        }
+        if ($request->filter == 2) {
+            $pasiens = Pasien::where(
+                'created_at',
+                'LIKE',
+                "%$request->month%"
+            )->get();
+        }
+        if ($request->filter == 3) {
+            $pasiens = Pasien::where(
+                'created_at',
+                'LIKE',
+                "%$request->year%"
+            )->get();
+        }
+
+        return view('pasien.table', compact('pasiens'));
     }
 }

@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             ToolSeeder::class,
             MedicineSeeder::class,
             SuportSeeder::class,
+            PasienSeeder::class,
         ]);
     }
 }
