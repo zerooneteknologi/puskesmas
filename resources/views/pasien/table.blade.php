@@ -1,7 +1,7 @@
 @include('partials.meta')
 
 <!-- Table with stripped rows -->
-<table class="table datatable table-hover">
+<table class="table datatable table-hover" id="pasienTable">
     <thead>
         <tr>
             <th>
@@ -43,3 +43,17 @@
 <!-- End Table with stripped rows -->
 
 @include('partials.footer')
+<script>
+    $(document).ready(function() {
+        $('#pasienTable').DataTable({
+            ordering: false,
+            info: false,
+            paging: false,
+            searching: false,
+            dom: 'Bfrtip', // Menambahkan tombol ekspor
+            buttons: [
+            'excel', 'pdf', 'print' // Pilihan ekspor
+            ],
+        });
+    });
+</script>

@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','PASIEN')
+@section('title','DAFTAR PASIEN')
 
 @section('content')
 
@@ -73,7 +73,7 @@
 
         <div id="tableTapsien">
             <!-- Table with stripped rows -->
-            <table class="table datatable table-hover">
+            <table class="table datatable table-hover" id="pasienTable">
                 <thead>
                     <tr>
                         <th>
@@ -216,5 +216,18 @@
     $('#year').on('change', function() {
         filter()
     })
+
+    $(document).ready(function() {
+        $('#pasienTable').DataTable({
+            ordering: false,
+            info: false,
+            paging: false,
+            searching: false,
+            dom: 'Bfrtip', // Menambahkan tombol ekspor
+            buttons: [
+            'excel', 'pdf', 'print' // Pilihan ekspor
+            ],
+        });
+    });
 </script>
 @endpush
