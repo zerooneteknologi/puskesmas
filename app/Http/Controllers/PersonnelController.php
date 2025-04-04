@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Personnel;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PersonnelController extends Controller
@@ -10,9 +11,9 @@ class PersonnelController extends Controller
     public function validateData(Request $request)
     {
         return $data = $request->validate([
-            'personnel_name' => '',
+            'personnel_director' => '',
             'personnel_nip' => '',
-            'personnel_role' => '',
+            'personnel_treasurer' => '',
         ]);
     }
     /**
@@ -21,7 +22,8 @@ class PersonnelController extends Controller
     public function index()
     {
         return view('personnel.index', [
-            'personnels' => Personnel::all(),
+            'personnel' => Personnel::first(),
+            'users' => User::latest()->get(),
         ]);
     }
 
@@ -38,16 +40,7 @@ class PersonnelController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $this->validateData($request);
-
-        Personnel::create($validated);
-
-        return redirect()
-            ->route('personnel.index')
-            ->with(
-                'success',
-                "Berhasil Menambahkan personnel baru \"$request->personnel_name\"!"
-            );
+        //
     }
 
     /**
@@ -63,9 +56,7 @@ class PersonnelController extends Controller
      */
     public function edit(Personnel $personnel)
     {
-        return view('personnel.edit', [
-            'personnel' => $personnel,
-        ]);
+        //
     }
 
     /**
@@ -79,10 +70,7 @@ class PersonnelController extends Controller
 
         return redirect()
             ->route('personnel.index')
-            ->with(
-                'success',
-                "Berhasil mengubah \"$personnel->personnel_name\"!"
-            );
+            ->with('success', 'Berhasil mengubah staff!');
     }
 
     /**
@@ -90,13 +78,6 @@ class PersonnelController extends Controller
      */
     public function destroy(Personnel $personnel)
     {
-        $personnel->delete();
-
-        return redirect()
-            ->route('personnel.index')
-            ->with(
-                'success',
-                "Berhasil Menghapus \"$personnel->personnel_name\"!"
-            );
+        //
     }
 }

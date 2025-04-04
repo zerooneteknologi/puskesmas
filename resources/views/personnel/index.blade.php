@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','STAFF')
+@section('title','SETTINGS')
 
 @section('content')
 
@@ -8,7 +8,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
-            <li class="breadcrumb-item active">Staff</li>
+            <li class="breadcrumb-item active">Pengaturan</li>
         </ol>
     </nav>
 </div><!-- End Page Title -->
@@ -29,51 +29,32 @@
 
             <div class="row">
                 <div class="col-6">
-                    <h5 class="card-title">Daftar Anggota/Staff</h5>
+                    <h5 class="card-title">Pengaturan Staff </h5>
                 </div>
                 <div class="col-6">
-                    <button type="button" class="btn btn-secondary float-end mt-3 btn-add">
-                        <i class="bi bi-plus me-1"></i> Tambah
+                    <button type="button" class="badge rounded-pill bg-light text-dark float-end mt-3 border-0 btn-add">
+                        <i class="bi bi-pencil-square me-1"></i>
                     </button>
                 </div>
             </div>
             <!-- Table with stripped rows -->
-            <table class="table datatable table-hover">
-                <thead>
-                    <tr>
-                        <th>
-                            No
-                        </th>
-                        <th>Nama</th>
-                        <th>NIP</th>
-                        <th>Jabatan</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
+            <table class="table table-borderless">
                 <tbody>
-                    @foreach ($personnels as $personnel)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $personnel->personnel_name }}</td>
-                        <td>{{ $personnel->personnel_nip }}</td>
-                        <td>{{ $personnel->personnel_role }}</td>
-                        <td>
-                            <a href="{{ route('personnel.edit', $personnel->id)}}" data-bs-toggle="tooltip"
-                                data-bs-placement="top" title="Edit" {{--
-                                onclick="edit( {{ $personnel->id }}, '{{$personnel->personnel_name}}', '{{ $personnel->personnel_nip }}', '{{ $personnel->personnel_role }}' )"
-                                --}} class="badge bg-warning border-0"><i class="bi bi-pencil-square me-1"></i></a>
-                            <form id="deleted-form" action="{{ route('personnel.destroy', $personnel->id) }}"
-                                method="POST" class="d-inline">
-                                <button class="badge bg-danger  border-0" data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title="Hapus"
-                                    onClick="return confirm(`Apakah Yakin hapus Partner {{ $personnel->personnel_name}}?`)">
-                                    <i class="bi bi-trash"></i></button>
-                                @csrf
-                                @method('delete')
-                            </form>
-                        </td>
+                        <th>Kepala UPT</th>
+                        <td style="width: 5%">:</td>
+                        <td>{{ $personnel->personnel_director }}</td>
                     </tr>
-                    @endforeach
+                    <tr>
+                        <th>NIP</th>
+                        <td style="width: 5%">:</td>
+                        <td>{{ $personnel->personnel_nip }}</td>
+                    </tr>
+                    <tr>
+                        <th>Bendahara</th>
+                        <td style="width: 5%">:</td>
+                        <td>{{ $personnel->personnel_treasurer }}</td>
+                    </tr>
                 </tbody>
             </table>
             <!-- End Table with stripped rows -->
@@ -90,19 +71,22 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <!-- General Form Elements -->
-                <form method="POST" action="" class="g-3 needs-validation" class="modal-form" novalidate>
+                <form method="POST" action="{{ route('personnel.update', $personnel->id)}}" class="g-3 needs-validation"
+                    class="modal-form" novalidate>
                     @csrf
 
-                    <input type="hidden" name="_method" class="method">
-                    {{-- <input type="text" name="id" id="personnel_id"> --}}
+                    <input type="hidden" name="_method" class="method" value="PUT">
+                    <input type="hidden" name="id" id="personnel_id" value="{{ $personnel->id}}">
 
                     <div class="modal-body">
                         <div class="row mb-3">
-                            <label for="personnel_name" class="col-sm-2 col-form-label">Nama</label>
+                            <label for="personnel_director" class="col-sm-2 col-form-label">Kepala UPT</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control @error('personnel_name') is-invalid @enderror"
-                                    id="personnel_name" name="personnel_name">
-                                @error('personnel_name')
+                                <input type="text"
+                                    class="form-control @error('personnel_director') is-invalid @enderror"
+                                    id="personnel_director" name="personnel_director"
+                                    value="{{ $personnel->personnel_director }}">
+                                @error('personnel_director')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -112,7 +96,7 @@
                             <label for="personnel_nip" class="col-sm-2 col-form-label">NIP</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control @error('personnel_nip') is-invalid @enderror"
-                                    id="personnel_nip" name="personnel_nip">
+                                    id="personnel_nip" name="personnel_nip" value="{{ $personnel->personnel_nip }}">
                                 @error('personnel_nip')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -120,11 +104,13 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="personnel_role" class="col-sm-2 col-form-label">Jabatan</label>
+                            <label for="personnel_treasurer" class="col-sm-2 col-form-label">Bendahara</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control @error('personnel_role') is-invalid @enderror"
-                                    id="personnel_role" name="personnel_role">
-                                @error('personnel_role')
+                                <input type="text"
+                                    class="form-control @error('personnel_treasurer') is-invalid @enderror"
+                                    id="personnel_treasurer" name="personnel_treasurer"
+                                    value="{{ $personnel->personnel_treasurer }}">
+                                @error('personnel_treasurer')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -146,15 +132,10 @@
 @push('script')
 <script>
     /**
-     * show modal create
+     * show modal update personnel
     */
     $('.btn-add').click(function (e) {
-        $('.modal-title').html('Tambah Anggota');
-        $('.modal-form').attr('action', "{{ route('personnel.store')}}");
-        $('.method').val('POST')
-        $('#personnel_name').val('')
-        $('#personnel_nip').val('')
-        $('#personnel_role').val('')
+        $('.modal-title').html('Edit staff');
         $('#personnelModal').modal('show');
     })
 

@@ -12,9 +12,9 @@ return new class extends Migration {
     {
         Schema::create('personnels', function (Blueprint $table) {
             $table->id();
-            $table->string('personnel_name');
+            $table->string('personnel_director');
             $table->string('personnel_nip');
-            $table->string('personnel_role');
+            $table->string('personnel_treasurer');
             $table->softDeletes();
             $table->timestamps();
         });

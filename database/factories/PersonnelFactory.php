@@ -17,9 +17,9 @@ class PersonnelFactory extends Factory
     public function definition(): array
     {
         return [
-            'personnel_name' => fake()->name(),
+            'personnel_director' => fake()->name(),
             'personnel_nip' => fake()->randomNumber(5, true),
-            'personnel_role' => fake()->word(),
+            'personnel_treasurer' => fake()->name(),
         ];
     }
 }
