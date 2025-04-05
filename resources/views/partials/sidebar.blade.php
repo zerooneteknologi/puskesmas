@@ -10,13 +10,7 @@
             </a>
         </li><!-- End Dashboard Nav -->
 
-        <li class="nav-item">
-            <a class="nav-link {{ request()->is('personnel*') ? '' : 'collapsed'}}"
-                href="{{ route('personnel.index')}}">
-                <i class="bi bi-people"></i>
-                <span>Staff</span>
-            </a>
-        </li><!-- End personnerl Nav -->
+        @if (auth()->user()->role_id == 1)
 
         <li class="nav-item">
             <a class="nav-link {{ request()->is('emergency*') ? '' : 'collapsed'}}"
@@ -68,6 +62,7 @@
                 <span>Pemeriksaan Penunjang</span>
             </a>
         </li><!-- End suport Nav -->
+        @endif
 
         <li class="nav-heading">Buat Nota</li>
         <li class="nav-item">

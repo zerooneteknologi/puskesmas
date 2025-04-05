@@ -26,7 +26,7 @@ Route::get('/home', [
     'index',
 ])->name('home');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['admin'])->group(function () {
     Route::resource('user', UserController::class);
     Route::resource('personnel', PersonnelController::class);
     Route::resource('emergency', EmergencyController::class);
@@ -36,8 +36,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('tool', ToolController::class);
     Route::resource('medicine', MedicineController::class);
     Route::resource('suport', SuportController::class);
-    Route::resource('note', NoteController::class);
     Route::resource('bill', BillController::class);
     Route::resource('pasien', PasienController::class);
     Route::get('filter', [PasienController::class, 'filter']);
 });
+Route::resource('note', NoteController::class)->middleware(['auth']);

@@ -20,12 +20,14 @@
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
 
+                    @if (auth()->user()->role_id == 1)
                     <li>
                         <a class="dropdown-item d-flex align-items-center" href="{{ route('user.index')}}">
                             <i class="bi bi-gear"></i>
                             <span>Settings</span>
                         </a>
                     </li>
+                    @endif
 
                     <li>
                         <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}" onclick="event.preventDefault();
