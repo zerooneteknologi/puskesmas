@@ -11,6 +11,7 @@ use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SuportController;
 use App\Http\Controllers\ToolController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,16 +26,18 @@ Route::get('/home', [
     'index',
 ])->name('home');
 
-Route::resource('personnel', PersonnelController::class);
-Route::resource('emergency', EmergencyController::class);
-Route::resource('room', RoomController::class);
-Route::resource('laboratory', LaboratoryController::class);
-Route::resource('action', ActionController::class);
-Route::resource('tool', ToolController::class);
-Route::resource('medicine', MedicineController::class);
-Route::resource('suport', SuportController::class);
-Route::resource('note', NoteController::class);
-Route::resource('bill', BillController::class);
-Route::post('bill/emergency', [BillController::class, 'emergency']);
-Route::resource('pasien', PasienController::class);
-Route::get('filter', [PasienController::class, 'filter']);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('user', UserController::class);
+    Route::resource('personnel', PersonnelController::class);
+    Route::resource('emergency', EmergencyController::class);
+    Route::resource('room', RoomController::class);
+    Route::resource('laboratory', LaboratoryController::class);
+    Route::resource('action', ActionController::class);
+    Route::resource('tool', ToolController::class);
+    Route::resource('medicine', MedicineController::class);
+    Route::resource('suport', SuportController::class);
+    Route::resource('note', NoteController::class);
+    Route::resource('bill', BillController::class);
+    Route::resource('pasien', PasienController::class);
+    Route::get('filter', [PasienController::class, 'filter']);
+});

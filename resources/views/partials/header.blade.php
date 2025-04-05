@@ -21,7 +21,7 @@
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="{{ route('personnel.index')}}">
+                        <a class="dropdown-item d-flex align-items-center" href="{{ route('user.index')}}">
                             <i class="bi bi-gear"></i>
                             <span>Settings</span>
                         </a>

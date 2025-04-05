@@ -21,10 +21,7 @@ class PersonnelController extends Controller
      */
     public function index()
     {
-        return view('personnel.index', [
-            'personnel' => Personnel::first(),
-            'users' => User::latest()->get(),
-        ]);
+        //
     }
 
     /**
@@ -69,7 +66,7 @@ class PersonnelController extends Controller
         $personnel->update($validated);
 
         return redirect()
-            ->route('personnel.index')
+            ->route('user.index')
             ->with('success', 'Berhasil mengubah staff!');
     }
 

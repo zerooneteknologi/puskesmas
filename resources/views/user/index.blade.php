@@ -62,6 +62,78 @@
         </div>
     </div>
 
+    <div class="card">
+        <div class="card-body">
+
+            <!-- Flash Message -->
+            @if (session()->has('successUser'))
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                <i class="bi bi-star me-1"></i>
+                {{ session('successUser') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+            <!-- end Flash Message -->
+
+            <div class="row">
+                <div class="col-6">
+                    <h5 class="card-title">Pengaturan Akun</h5>
+                </div>
+                <div class="col-6">
+                    <a href="{{ route('user.create')}}" type="button" class="btn btn-primary float-end mt-3">
+                        <i class="bi bi-plus me-1">Tambah</i>
+                    </a>
+                </div>
+            </div>
+            <!-- Table with stripped rows -->
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                        <th>Nama</th>
+                        <th>email</th>
+                        <th>Jenis akun</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($users as $user)
+                    <tr>
+                        <th>{{ $loop->iteration}}</th>
+                        <td>{{ $user->name}}</td>
+                        <td>{{ $user->email}}</td>
+                        <td>
+                            @if ($user->role_id == 1)
+                            Admin
+                            @else
+                            User
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('user.edit', $user->id)}}" data-bs-toggle="tooltip"
+                                data-bs-placement="top" title="Edit" class="badge bg-warning border-0"><i
+                                    class="bi bi-pencil-square me-1"></i></a>
+                            <form id="deleted-form" action="{{ route('user.destroy', $user->id) }}" method="POST"
+                                class="d-inline">
+                                @csrf
+                                @method('delete')
+                                <button class="badge bg-danger  border-0" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" title="Hapus"
+                                    onClick="return confirm(`Apakah Yakin hapus perawatan {{ $user->user_name}}?`)">
+                                    <i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <!-- End Table with stripped rows -->
+
+        </div>
+    </div>
+
     <!-- Vertically centered Modal-->
     <div class="modal fade" id="personnelModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
