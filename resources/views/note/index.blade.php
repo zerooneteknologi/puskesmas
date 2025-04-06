@@ -534,7 +534,7 @@
 
 <!-- Vertically centered Modal -->
 <div class="modal fade" id="tabelModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-body" id="modal-body">
 
@@ -626,6 +626,8 @@
     }
     
     function emergency(category, name, price) {
+        var button = $(event.target).closest('button');
+        var icon = button.find('i');
         $.ajax({
             type: 'post',
             url: "{{ route('bill.store')}}",
@@ -638,6 +640,12 @@
                     },
             success: function(data){
                 checkCategory(category, data)
+                icon.removeClass('bi-plus-square');
+                icon.addClass('bi-check2-square');
+                button.removeClass('bg-info')
+                button.addClass('bg-success')
+                button.prop('disabled', true);
+                button.attr('title', 'Ditambahkan')
             }
         })
     }

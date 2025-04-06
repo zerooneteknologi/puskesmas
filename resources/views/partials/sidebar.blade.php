@@ -64,6 +64,14 @@
         </li><!-- End suport Nav -->
         @endif
 
+        <li class="nav-heading">Laporan</li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('pasien')  ? '' : 'collapsed' }}" href="{{ route('pasien.index')}}">
+                <i class="bi bi-clipboard2-pulse"></i>
+                <span>Laporan Pasien</span>
+            </a>
+        </li><!-- End suport Nav -->
+
         <li class="nav-heading">Buat Nota</li>
         <li class="nav-item">
             <a class="nav-link {{ request()->is('note') && request()->query('unit') === 'a' ? '' : 'collapsed' }}"

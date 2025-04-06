@@ -32,7 +32,7 @@
 </h5>
 
 <!-- Table with stripped rows -->
-<table class="table datatable table-hover">
+<table class="table table-hover" id="noteTable">
     <thead>
         <tr>
             <th>
@@ -164,7 +164,7 @@
             <td>{{ $action->action_name }}</td>
             <td>Rp. {{ number_format($action->action_price,2,",",".") }}</td>
             <td>
-                <button
+                <button id="btn-table"
                     onclick="emergency({{request()->category}}, '{{ $action->action_name}}', '{{ $action->action_price}}')"
                     data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah" class="badge bg-info border-0"><i
                         class="bi bi-plus-square me-1"></i></button>
@@ -178,3 +178,10 @@
 <!-- End Table with stripped rows -->
 
 @include('partials.footer')
+
+<script>
+    $(document).ready(function() {
+        $('#noteTable').DataTable({
+        });
+    });
+</script>
