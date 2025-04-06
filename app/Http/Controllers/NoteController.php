@@ -23,7 +23,10 @@ class NoteController extends Controller
      */
     public function index()
     {
-        return view('note.index');
+        return view('note.index', [
+            'emergency' => Emergency::find(1),
+            'restorasi' => Emergency::find(2),
+        ]);
     }
 
     /**
