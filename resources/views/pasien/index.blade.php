@@ -128,11 +128,10 @@
                 <h5 class="modal-title">Tambah Dikon</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            @if ($pasiens->count() !== 0)
-            <form action="{{ route('pasien.update', $pasien->id)}}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <!-- Horizontal Form -->
+            <div class="modal-body">
+                <!-- Horizontal Form -->
+                <form action="{{ route('pasien.update', $pasien->id)}}" method="POST">
+                    @csrf
                     <input type="hidden" name="_method" value="PUT">
                     <input type="hidden" class="form-control" id="pasien_id" name="pasien_id">
                     <input type="hidden" class="form-control" id="pasien_nomor" name="pasien_nomor">
@@ -153,13 +152,12 @@
                     </div>
                     <div class="text-center">
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Tambah diskon</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Tambah diskon</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
             </form><!-- End Horizontal Form -->
-            @endif
         </div>
     </div>
 </div><!-- End Vertically centered Modal-->

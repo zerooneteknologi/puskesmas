@@ -29,14 +29,14 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             PersonnelSeeder::class,
-            // EmergencySeeder::class,
-            // RoomSeeder::class,
-            // LaboratorySeeder::class,
-            // ActionSeeder::class,
-            // ToolSeeder::class,
-            // MedicineSeeder::class,
-            // SuportSeeder::class,
-            // PasienSeeder::class,
+            EmergencySeeder::class,
+            RoomSeeder::class,
+            LaboratorySeeder::class,
+            ActionSeeder::class,
+            ToolSeeder::class,
+            MedicineSeeder::class,
+            SuportSeeder::class,
+            PasienSeeder::class,
         ]);
     }
 }

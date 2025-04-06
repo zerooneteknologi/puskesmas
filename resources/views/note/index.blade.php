@@ -188,9 +188,19 @@
         <div class="card">
             <div class="card-body">
 
+                <div class="row">
+                    <div class="col-6">
+                        <h5 class="card-title">UGD</h5>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="btn btn-secondary float-end mt-3" onclick="add(1)">
+                            <i class="bi bi-plus me-1"></i> Tambah
+                        </button>
+                    </div>
+                </div>
                 <!-- Table with stripped rows -->
                 <div id="emergency">
-                    <table class="table table-hover">
+                    <table class="table datatable table-hover">
                         <thead>
                             <tr>
                                 <th>
@@ -201,39 +211,15 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                @if (request()->unit == 'a')
-                                <td>
-                                    <input type="hidden" name="note_category[]" value="1">
-                                    <input type="text" class="form-control-plaintext"
-                                        value="{{ $restorasi->emergency_name }}" name="note_name[]">
-                                </td>
-                                <td>
-                                    <input type="hidden" name="note_price[]" value="{{ $restorasi->emergency_price}}">
-                                    Rp. {{
-                                    number_format($restorasi->emergency_price,2,",",".") }}
-                                </td>
-                                <td></td>
-                                @endif
-                                @if (request()->unit == 'b')
-                                <td>
-                                    <input type="hidden" name="note_category[]" value="1">
-                                    <input type="text" class="form-control-plaintext"
-                                        value="{{ $emergency->emergency_name }}" name="note_name[]">
-                                </td>
-                                <td>
-                                    <input type="hidden" name="note_price[]" value="{{ $emergency->emergency_price}}">
-                                    Rp. {{
-                                    number_format($emergency->emergency_price,2,",",".") }}
-                                </td>
-                                <td></td>
-                                @endif
-                            </tr>
-                        </tbody>
                     </table>
+
+                    <div class="row">
+                        <span class="text-bold col-md-6"><strong>Jumlah</strong></span>
+                        <span class="col-md-6 text-end"><strong>Rp. {{ number_format(0)}}</strong></span>
+                    </div>
                 </div>
+
+
             </div>
         </div>
         @endif
