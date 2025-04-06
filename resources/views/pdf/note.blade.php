@@ -243,17 +243,20 @@
 
         <div class="patient-details">
             <!-- Tabel Pertama -->
+            @php
+            $signatur = getSignatur();
+            @endphp
             <table>
                 <tr>
                     <td colspan="2">
-                        <p style="text-align: right">Cisurupan, {{ date('d M Y')}}</p>
+                        <p style="text-align: right">Cisurupan, {{ now()->translatedFormat('d F Y') }}</p>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <p style="text-align: center">Penerima,</p>
+                        <p style="text-align: center">Bendahara,</p>
                         <div style="margin-bottom: 60px"></div>
-                        <p style="text-align: center">(_________________________)</p>
+                        <p style="text-align: center">( <b>{{ $signatur['personnel_treasurer']}}</b> )</p>
                     </td>
                     <td>
                         <p style="text-align: center">Keluarga Pasien</p>
@@ -267,8 +270,9 @@
                         <p style="text-align: center; margin: 0; padding: 0;">Kepala/Dokter Pemeriksa</p>
                         <p style="text-align: center; margin: 0; padding: 0;">UPT Puskesmas Cisurupan</p>
                         <div style="margin-bottom: 60px"></div>
-                        <p style="text-align: center; margin: 0; padding: 0;">(_________________________)</p>
-                        <p style="text-align: center; margin: 0; padding: 0;">NIP :</p>
+                        <p style="text-align: center; margin: 0; padding: 0;">( <b>{{
+                                $signatur['personnel_director']}}</b> )</p>
+                        <p style="text-align: center; margin: 0; padding: 0;">NIP : {{ $signatur['personnel_nip']}}</p>
                     </td>
                 </tr>
             </table>
@@ -398,15 +402,20 @@
             <!-- Tabel Pertama -->
             <table>
                 <tr>
+                    <td colspan="2">
+                        <p style="text-align: right">Cisurupan, {{ now()->translatedFormat('d F Y') }}</p>
+                    </td>
+                </tr>
+                <tr>
                     <td>
                         <p style="text-align: center">Penerima,</p>
                         <div style="margin-bottom: 60px"></div>
                         <p style="text-align: center">(_________________________)</p>
                     </td>
                     <td>
-                        <p style="text-align: center">Petugas,</p>
+                        <p style="text-align: center">Bendahara,</p>
                         <div style="margin-bottom: 60px"></div>
-                        <p style="text-align: center">(_________________________)</p>
+                        <p style="text-align: center">( <b>{{ $signatur['personnel_treasurer']}}</b> )</p>
                     </td>
                 </tr>
             </table>
