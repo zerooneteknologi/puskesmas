@@ -129,6 +129,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+
+                @if ($pasiens->count() !== 0)
                 <!-- Horizontal Form -->
                 <form action="{{ route('pasien.update', $pasien->id)}}" method="POST">
                     @csrf
@@ -158,6 +160,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
             </form><!-- End Horizontal Form -->
+            @endif
         </div>
     </div>
 </div><!-- End Vertically centered Modal-->
