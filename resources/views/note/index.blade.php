@@ -569,7 +569,8 @@
                     <div class="row mb-3">
                         <label for="price" class="col-sm-3 col-form-label">Harga (Rp)</label>
                         <div class="col-sm-9">
-                            <input type="number" class="form-control" id="note_price" name="price" required>
+                            <input type="hidden" id="note_price" name="price">
+                            <input type="text" class="form-control" id="numberInput" required>
                         </div>
                     </div>
 
@@ -577,7 +578,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="addBill()">Tambahkan</button>
+                    <button type="button" class="btn btn-primary" onclick="addBill()"
+                        data-bs-dismiss="modal">Tambahkan</button>
                 </div>
             </form><!-- End General Form Elements -->
         </div>
@@ -588,6 +590,35 @@
 
 @push('script')
 <script>
+    /**
+    * format number
+    */
+    const number = document.getElementById('note_price');
+    const input = document.getElementById('numberInput');
+    
+    input.addEventListener('input', function (e) {
+        // Ambil nilai input dan hapus semua karakter non-digit
+        let value = e.target.value.replace(/[^0-9]/g, '');
+        // number.value(value)
+        // Ubah string angka menjadi number
+        let numberValue = parseFloat(value);
+        
+        // Format angka dengan pemisah ribuan
+        let formattedValue = new Intl.NumberFormat().format(numberValue);
+        
+        // Set nilai input ke format yang sudah diformat
+        e.target.value = formattedValue;
+        
+        let rawValue = input.value.replace(/[^0-9]/g, ''); // Hapus koma dan karakter non-digit
+        
+        if (!rawValue || isNaN(rawValue)) {
+        alert('Input harus berupa angka!');
+        return; // Hentikan proses
+        }
+        let numberFormat = parseFloat(rawValue); // Konversi ke number
+        number.value = numberFormat;
+    });
+
     /**
     * show modal create tabel rincian
     */
@@ -646,6 +677,7 @@
                 button.addClass('bg-success')
                 button.prop('disabled', true);
                 button.attr('title', 'Ditambahkan')
+                $('#spinner').css('display', 'none');
             }
         })
     }
@@ -654,6 +686,7 @@
         let category = $('#note_category').val();
         let name = $('#note_name').val();
         let price = $('#note_price').val();
+        $('#spinner').css('display', 'flex');
         emergency(category, name, price)
     }
 
