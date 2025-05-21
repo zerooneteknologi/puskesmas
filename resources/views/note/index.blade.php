@@ -59,6 +59,20 @@
                 <div class="row">
                     <input type="hidden" name="note_unit" value="{{ request()->unit}}">
                     <div class="col-md-6">
+                        {{-- nik --}}
+                        <div class="row mb-3">
+                            <label for="pasien_nik" class="form-label col-md-4">NIK Pasien</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control @error('pasien_nik') is-invalid @enderror"
+                                    id="pasien_nik" name="pasien_nik" required>
+                                <span class="invalid-feedback">Mohon Diisi</span>
+                                @error('pasien_nik')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- name --}}
                         <div class="row mb-3">
                             <label for="pasien_name" class="form-label col-md-4">Nama Pasien</label>
                             <div class="col-md-8">
@@ -71,6 +85,7 @@
                             </div>
                         </div>
 
+                        {{-- age --}}
                         <div class="row mb-3">
                             <label for="pasien_age" class="form-label col-md-4">Usia Pasien</label>
                             <div class="col-md-8">
@@ -83,6 +98,7 @@
                             </div>
                         </div>
 
+                        {{-- address --}}
                         <div class="row mb-3">
                             <label for="pasien_address" class="form-label col-md-4">Alamat Pasien</label>
                             <div class="col-md-8">
@@ -95,6 +111,7 @@
                             </div>
                         </div>
 
+                        {{-- status --}}
                         <div class="row mb-3">
                             <label for="pasien_status" class="form-label col-md-4">Status Pasien</label>
                             <div class="col-md-8">
@@ -111,11 +128,12 @@
 
                     </div>
                     <div class="col-md-6">
+                        {{-- date in --}}
                         <div class="row mb-3">
-                            @if (request()->unit == 'd')
-                            <label for="pasien_in" class="form-label col-md-4">Tanggal berobat</label>
+                            @if (request()->unit == 'a' || request()->unit == 'd')
+                            <label for="pasien_in" class="form-label col-md-4">Tanggal Berobat</label>
                             @else
-                            <label for="pasien_in" class="form-label col-md-4">Tanggal Dirawat</label>
+                            <label for="pasien_in" class="form-label col-md-4">Tanggal Masuk</label>
                             @endif
                             <div class="col-md-8">
                                 <input type="date" class="form-control @error('pasien_in') is-invalid @enderror"
@@ -127,7 +145,8 @@
                             </div>
                         </div>
 
-                        @if (request()->unit != 'd')
+                        @if (request()->unit == 'b' || request()->unit == 'c')
+                        {{-- date out --}}
                         <div class="row mb-3">
                             <label for="pasien_out" class="form-label col-md-4">Tanggal Keluar</label>
                             <div class="col-md-8">
@@ -140,6 +159,7 @@
                             </div>
                         </div>
 
+                        {{-- sum day --}}
                         <div class="row mb-3">
                             <label for="pasien_sum" class="form-label col-md-4">Jumlah HP</label>
                             <div class="col-md-8">
@@ -151,7 +171,10 @@
                                 @enderror
                             </div>
                         </div>
+                        @endif
 
+                        @if (request()->unit != 'd')
+                        {{-- room --}}
                         <div class="row mb-3">
                             <label for="pasien_room" class="form-label col-md-4">Ruangan</label>
                             <div class="col-md-8">
@@ -578,8 +601,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="addBill()"
-                        data-bs-dismiss="modal">Tambahkan</button>
+                    <a type="button" class="btn btn-primary" onclick="addBill()" data-bs-dismiss="modal">Tambahkan</a>
                 </div>
             </form><!-- End General Form Elements -->
         </div>

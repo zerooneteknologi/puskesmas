@@ -93,7 +93,7 @@
             <a class="nav-link {{ request()->is('note') && request()->query('unit') === 'c' ? '' : 'collapsed' }}"
                 href="{{ route('note.index')}}?unit=c">
                 <i class="bi bi-person-gear"></i>
-                <span>Bidan</span>
+                <span>PONED</span>
             </a>
         </li><!-- End suport Nav -->
 
