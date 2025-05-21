@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('actions', function (Blueprint $table) {
             $table->id();
-            $table->enum('action_category', [1, 2]); // 1. umum 2. bidan
+            $table->enum('action_category', [1, 2, 3]); // 1. umum 2. PONED 3. GIGI
             $table->string('action_name');
             $table->integer('action_price');
             $table->softDeletes();

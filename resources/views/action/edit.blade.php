@@ -31,7 +31,9 @@
                         <option value="1" {{ old('action_category', $action->action_category ) == 1 ? 'selected' :
                             ''}}>Umum</option>
                         <option value="2" {{ old('action_category', $action->action_category ) == 2 ? 'selected' :
-                            ''}}>Bidan</option>
+                            ''}}>PONED</option>
+                        <option value="3" {{ old('action_category', $action->action_category ) == 3 ? 'selected' :
+                            ''}}>Gigi</option>
                     </select>
                 </div>
             </div>

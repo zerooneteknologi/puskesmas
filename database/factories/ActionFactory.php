@@ -17,7 +17,7 @@ class ActionFactory extends Factory
     public function definition(): array
     {
         return [
-            'action_category' => rand(1, 2),
+            'action_category' => rand(1, 3),
             'action_name' => fake()->name(),
             'action_price' => fake()->randomNumber(3, true),
         ];

@@ -57,8 +57,12 @@
                         <td>
                             @if ($action->action_category == 1)
                             Umum
-                            @else
-                            Bidan
+                            @endif
+                            @if ($action->action_category == 2)
+                            PONED
+                            @endif
+                            @if ($action->action_category == 3)
+                            Gigi
                             @endif
                         </td>
                         <td>{{ $action->action_name }}</td>
@@ -110,13 +114,14 @@
                                 name="action_category" required>
                                 <option value="">Pilih Kategori</option>
                                 <option value="1">Umum</option>
-                                <option value="2">Bidan</option>
+                                <option value="2">PONED</option>
+                                <option value="3">Gigi</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="row mb-3">
-                        <label for="action_name" class="col-sm-2 col-form-label">Nama</label>
+                        <label for="action_name" class="col-sm-2 col-form-label">Tindakan</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control @error('action_name') is-invalid @enderror"
                                 id="action_name" name="action_name">
