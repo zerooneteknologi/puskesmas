@@ -59,6 +59,13 @@
                 <div class="row">
                     <input type="hidden" name="note_unit" value="{{ request()->unit}}">
                     <div class="col-md-6">
+
+                        {{-- create random for time and byte --}}
+                        @php
+                        $randomValue = round(microtime(true) * 1000) . bin2hex(random_bytes(2));
+                        @endphp
+                        <input type="hidden" name="random_value" value="{{ $randomValue }}">
+
                         {{-- nik --}}
                         <div class="row mb-3">
                             <label for="pasien_nik" class="form-label col-md-4">NIK Pasien</label>
@@ -136,8 +143,9 @@
                             <label for="pasien_in" class="form-label col-md-4">Tanggal Masuk</label>
                             @endif
                             <div class="col-md-8">
-                                <input type="date" class="form-control @error('pasien_in') is-invalid @enderror"
-                                    id="pasien_in" name="pasien_in" required>
+                                <input type="datetime-local"
+                                    class="form-control @error('pasien_in') is-invalid @enderror" id="pasien_in"
+                                    name="pasien_in" required>
                                 <span class="invalid-feedback">Mohon Diisi</span>
                                 @error('pasien_in')
                                 <span class="invalid-feedback">{{ $message }}</span>
@@ -150,8 +158,9 @@
                         <div class="row mb-3">
                             <label for="pasien_out" class="form-label col-md-4">Tanggal Keluar</label>
                             <div class="col-md-8">
-                                <input type="date" class="form-control @error('pasien_out') is-invalid @enderror"
-                                    id="pasien_out" name="pasien_out" required>
+                                <input type="datetime-local"
+                                    class="form-control @error('pasien_out') is-invalid @enderror" id="pasien_out"
+                                    name="pasien_out" required>
                                 <span class="invalid-feedback">Mohon Diisi</span>
                                 @error('pasien_out')
                                 <span class="invalid-feedback">{{ $message }}</span>
@@ -343,7 +352,7 @@
                     </div>
                 </div>
 
-                <div id="action">
+                <div id="midwife">
                     <!-- Table with stripped rows -->
                     <table class="table datatable table-hover">
                         <thead>
@@ -376,7 +385,48 @@
 
                 <div class="row">
                     <div class="col-6">
-                        <h5 class="card-title">Tindakan</h5>
+                        <h5 class="card-title">Tindakan Gigi</h5>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="btn btn-secondary float-end mt-3" onclick="add(9)">
+                            <i class="bi bi-plus me-1"></i> Tambah
+                        </button>
+                    </div>
+                </div>
+
+                <div id="theet">
+                    <!-- Table with stripped rows -->
+                    <table class="table datatable table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    No
+                                </th>
+                                <th>Nama</th>
+                                <th>Harga</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <!-- End Table with stripped rows -->
+
+                    <div class="row">
+                        <span class="text-bold col-md-6"><strong>Jumlah</strong></span>
+                        <span class="col-md-6 text-end"><strong>Rp. {{ number_format(0)}}</strong></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-6">
+                        <h5 class="card-title">Tindakan Umum</h5>
                     </div>
                     <div class="col-6">
                         <button type="button" class="btn btn-secondary float-end mt-3" onclick="add(4)">
@@ -654,6 +704,11 @@
         })
     }
 
+    /**
+     * check category
+     * @param {int} category
+     * @param {string} data
+     */
     function checkCategory(category, data) {
         if (category == 1) {
         $('#emergency').html(data)
@@ -676,34 +731,54 @@
         if (category == 7) {
         $('#medicine').html(data)
         }
+        if (category == 8) {
+        $('#midwife').html(data)
+        }
+        if (category == 9) {
+        $('#theet').html(data)
+        }
     }
     
+    /**
+     * add bill
+     * @param {int} category
+     * @param {string} name
+     * @param {int} price
+     */
     function emergency(category, name, price) {
         var button = $(event.target).closest('button');
         var icon = button.find('i');
+        // Ambil nilai random dari input hidden
+        var random = $('input[name="random_value"]').val();
+
         $.ajax({
             type: 'post',
             url: "{{ route('bill.store')}}",
-            data: { category : category, 
-                    name : name, 
-                    price: price
-                    },
+            data: { 
+            category : category, 
+            name : name, 
+            price: price,
+            bill_code: random // kirim random value
+            },
             headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token
-                    },
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token
+            },
             success: function(data){
-                checkCategory(category, data)
-                icon.removeClass('bi-plus-square');
-                icon.addClass('bi-check2-square');
-                button.removeClass('bg-info')
-                button.addClass('bg-success')
-                button.prop('disabled', true);
-                button.attr('title', 'Ditambahkan')
-                $('#spinner').css('display', 'none');
+            checkCategory(category, data)
+            icon.removeClass('bi-plus-square');
+            icon.addClass('bi-check2-square');
+            button.removeClass('bg-info')
+            button.addClass('bg-success')
+            button.prop('disabled', true);
+            button.attr('title', 'Ditambahkan')
+            $('#spinner').css('display', 'none');
             }
         })
     }
 
+    /**
+     * add bill
+     */
     function addBill() {
         let category = $('#note_category').val();
         let name = $('#note_name').val();
@@ -712,6 +787,13 @@
         emergency(category, name, price)
     }
 
+    /**
+     * remove bill
+     * @param {int} id
+     * @param {int} category
+     * @param {string} name
+     * @param {int} price
+     */
     function removeBill(id, category, name, price) {
         $.ajax({
             type: 'delete',
@@ -726,7 +808,9 @@
         })
     }
 
-    
+    /**
+     * store note
+     */
     $('#save').on('click', function(e) {
         if (!validasiForm()) {
             e.preventDefault(); // Mencegah pengiriman form jika validasi gagal
@@ -744,33 +828,37 @@
         }
     })
 
+    /**
+     * validasi form
+     * @returns {boolean}
+     */ 
     function validasiForm() {
-    let fields = [
-    { id: '#pasien_name', pesan: 'Nama pasien mohon diisi' },
-    { id: '#pasien_age', pesan: 'Umur pasien mohon diisi' },
-    { id: '#pasien_address', pesan: 'Alamat pasien mohon diisi' },
-    { id: '#pasien_status', pesan: 'Status pasien mohon dipilih', isSelect: true }, // Tambahkan flag isSelect
-    { id: '#pasien_in', pesan: 'Tanggal Masuk mohon diisi' },
-    { id: '#pasien_out', pesan: 'Tanggal Keluar mohon diisi' },
-    { id: '#pasien_sum', pesan: 'JUmlah HP mohon diisi' },
-    { id: '#pasien_room', pesan: 'Ruangan pasien mohon diisi' },
-    { id: '#pasien_diagnoses', pesan: 'Diagnosa pasien mohon diisi' }
-    ];
+        let fields = [
+            { id: '#pasien_name', pesan: 'Nama pasien mohon diisi' },
+            { id: '#pasien_age', pesan: 'Umur pasien mohon diisi' },
+            { id: '#pasien_address', pesan: 'Alamat pasien mohon diisi' },
+            { id: '#pasien_status', pesan: 'Status pasien mohon dipilih', isSelect: true }, // Tambahkan flag isSelect
+            { id: '#pasien_in', pesan: 'Tanggal Masuk mohon diisi' },
+            { id: '#pasien_out', pesan: 'Tanggal Keluar mohon diisi' },
+            { id: '#pasien_sum', pesan: 'JUmlah HP mohon diisi' },
+            { id: '#pasien_room', pesan: 'Ruangan pasien mohon diisi' },
+            { id: '#pasien_diagnoses', pesan: 'Diagnosa pasien mohon diisi' }
+        ];
     
-    let errors = []; // Untuk menyimpan pesan error
-    let fieldKosongPertama = null; // Untuk menyimpan field pertama yang kosong
+        let errors = []; // Untuk menyimpan pesan error
+        let fieldKosongPertama = null; // Untuk menyimpan field pertama yang kosong
+        
+        fields.forEach(field => {
+        let element = $(field.id); // Ambil elemen dari DOM
+        if (element.length === 0) {
+        // Jika elemen tidak ditemukan, lewati validasi untuk field ini
+        // console.log(`Element dengan ID ${field.id} tidak ditemukan di DOM.`);
+        return;
+        }
     
-    fields.forEach(field => {
-    let element = $(field.id); // Ambil elemen dari DOM
-    if (element.length === 0) {
-    // Jika elemen tidak ditemukan, lewati validasi untuk field ini
-    // console.log(`Element dengan ID ${field.id} tidak ditemukan di DOM.`);
-    return;
-    }
-    
-    let value = element.val(); // Ambil nilai dari elemen
-    if (field.isSelect) {
-    // Jika elemen adalah <select>, cek apakah nilai default (kosong) dipilih
+        let value = element.val(); // Ambil nilai dari elemen
+        if (field.isSelect) {
+        // Jika elemen adalah <select>, cek apakah nilai default (kosong) dipilih
         if (value === '' || value === null) {
         errors.push(field.pesan); // Tambahkan pesan error jika tidak ada pilihan
         element.addClass('is-invalid'); // Tandai select sebagai invalid
@@ -803,6 +891,6 @@
         }
     
         return true; // Izinkan pengiriman form jika semua field valid
-        }
+    }
 </script>
 @endpush

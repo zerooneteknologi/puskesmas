@@ -12,7 +12,8 @@ return new class extends Migration {
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
-            $table->enum('bill_category', [1, 2, 3, 4, 5, 6, 7]);
+            $table->string('bill_code')->nullable();
+            $table->enum('bill_category', [1, 2, 3, 4, 5, 6, 7, 8, 9]);
             $table->string('bill_name');
             $table->integer('bill_price');
             $table->timestamps();

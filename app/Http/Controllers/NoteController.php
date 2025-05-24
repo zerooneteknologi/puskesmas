@@ -14,6 +14,7 @@ use App\Models\Suport;
 use App\Models\Tool;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class NoteController extends Controller
@@ -31,15 +32,31 @@ class NoteController extends Controller
      */
     public function create(Request $request)
     {
+        /**
+         * get actions
+         * 1. kategori_1
+         * 2. kategori_2
+         * 3. kategori_3
+         * */
+        $actions = Cache::remember('actions', 120, function () {
+            $allActions = Action::all();
+            return [
+                'kategori_1' => $allActions->where('action_category', 1),
+                'kategori_2' => $allActions->where('action_category', 2),
+                'kategori_3' => $allActions->where('action_category', 3),
+            ];
+        });
+
         return view('note.table', [
-            'emergencies' => Emergency::all(),
-            'rooms' => Room::all(),
-            'laboratories' => Laboratory::all(),
-            'actions' => Action::where('action_category', 1)->get(),
-            'midwives' => Action::where('action_category', 2)->get(),
-            'suports' => Suport::all(),
-            'tools' => Tool::all(),
-            'medicines' => Medicine::all(),
+            'emergencies' => Cache::remember('emergencies', 120, fn() => Emergency::all()),
+            'rooms' => Cache::remember('rooms', 120, fn() => Room::all()),
+            'laboratories' => Cache::remember('laboratories', 120, fn() => Laboratory::all()),
+            'actions' => $actions['kategori_1'],
+            'midwives' => $actions['kategori_2'],
+            'teeth' => $actions['kategori_3'],
+            'suports' => Cache::remember('suports', 120, fn() => Suport::all()),
+            'tools' => Cache::remember('tools', 120, fn() => Tool::all()),
+            'medicines' => Cache::remember('medicines', 120, fn() => Medicine::all()),
         ]);
     }
 

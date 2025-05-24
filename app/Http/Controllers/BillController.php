@@ -19,9 +19,7 @@ class BillController extends Controller
      */
     public function index()
     {
-        return view('pdf.note', []);
-        $pdf = PDF::loadView('pdf.note');
-        return $pdf->stream('invoice.pdf');
+        //
     }
 
     /**
@@ -38,16 +36,20 @@ class BillController extends Controller
     public function store(Request $request)
     {
         Bill::create([
+            'bill_code' => $request->bill_code,
             'bill_category' => $request->category,
             'bill_name' => $request->name,
             'bill_price' => $request->price,
         ]);
+
+        $bill = Bill::where('bill_code', $request->bill_code)
+            ->Where('bill_category', $request->category)
+            ->get();
+
         return view('note.create', [
             'category' => $request->category,
-            'bills' => Bill::where('bill_category', $request->category)->get(),
-            'total' => Bill::where('bill_category', $request->category)->sum(
-                'bill_price'
-            ),
+            'bills' => $bill,
+            'total' => $bill->sum('bill_price'),
         ]);
     }
 
