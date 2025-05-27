@@ -19,11 +19,14 @@ return new class extends Migration {
          * 5. penunjang/suport
          * 6. alat/tools
          * 7. obat/medicine
+         * 8. bidan/midwife
+         * 9. gigi/teeth
          */
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
+            $table->dateTime('note_date');
             $table->foreignIdFor(Pasien::class);
-            $table->enum('note_category', [1, 2, 3, 4, 5, 6, 7, 8]);
+            $table->enum('note_category', [1, 2, 3, 4, 5, 6, 7, 8, 9]);
             $table->string('note_name');
             $table->integer('note_price');
             $table->timestamps();

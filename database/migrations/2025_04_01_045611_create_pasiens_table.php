@@ -12,14 +12,14 @@ return new class extends Migration {
     {
         Schema::create('pasiens', function (Blueprint $table) {
             $table->id();
-            $table->string('pasien_nomor');
             $table->string('pasien_nik');
+            $table->string('pasien_nomor');
             $table->string('pasien_name');
             $table->integer('pasien_age');
             $table->text('pasien_address');
             $table->enum('pasien_status', [1, 2]); //1. umum 2. BPJS
-            $table->date('pasien_in');
-            $table->date('pasien_out')->nullable();
+            $table->datetime('pasien_in');
+            $table->datetime('pasien_out')->nullable();
             $table->integer('pasien_sum')->nullable();
             $table->string('pasien_room')->nullable();
             $table->string('pasien_diagnoses')->nullable();

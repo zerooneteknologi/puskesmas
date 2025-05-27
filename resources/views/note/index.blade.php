@@ -68,62 +68,62 @@
 
                         {{-- nik --}}
                         <div class="row mb-3">
-                            <label for="pasien_nik" class="form-label col-md-4">NIK Pasien</label>
+                            <label for="pasien_nik" class="form-label col-md-4">
+                                NIK Pasien <small class="text-danger">*</small>
+                            </label>
                             <div class="col-md-8">
-                                <input type="text" class="form-control @error('pasien_nik') is-invalid @enderror"
-                                    id="pasien_nik" name="pasien_nik" required>
+                                <input type="text" class="form-control" id="pasien_nik" name="pasien_nik" required>
                                 <span class="invalid-feedback">Mohon Diisi</span>
-                                @error('pasien_nik')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
                             </div>
                         </div>
 
                         {{-- name --}}
                         <div class="row mb-3">
-                            <label for="pasien_name" class="form-label col-md-4">Nama Pasien</label>
+                            <label for="pasien_name" class="form-label col-md-4">
+                                Nama Pasien <small class="text-danger">*</small>
+                            </label>
                             <div class="col-md-8">
-                                <input type="text" class="form-control @error('pasien_name') is-invalid @enderror"
-                                    id="pasien_name" name="pasien_name" required>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="pasien_name" name="pasien_name"
+                                        aria-describedby="basic-addon1" required>
+                                </div>
                                 <span class="invalid-feedback">Mohon Diisi</span>
-                                @error('pasien_name')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
                             </div>
                         </div>
 
                         {{-- age --}}
                         <div class="row mb-3">
-                            <label for="pasien_age" class="form-label col-md-4">Usia Pasien</label>
+                            <label for="pasien_age" class="form-label col-md-4">
+                                Usia Pasien <small class="text-danger">*</small>
+                            </label>
                             <div class="col-md-8">
-                                <input type="text" class="form-control @error('pasien_age') is-invalid @enderror"
-                                    id="pasien_age" name="pasien_age" required>
+                                <input type="number" class="form-control" id="pasien_age" name="pasien_age" required>
                                 <span class="invalid-feedback">Mohon Diisi</span>
-                                @error('pasien_age')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
                             </div>
                         </div>
 
                         {{-- address --}}
                         <div class="row mb-3">
-                            <label for="pasien_address" class="form-label col-md-4">Alamat Pasien</label>
+                            <label for="pasien_address" class="form-label col-md-4">
+                                Alamat Pasien <small class="text-danger">*</small>
+                            </label>
                             <div class="col-md-8">
-                                <input type="text" class="form-control @error('pasien_address') is-invalid @enderror"
-                                    id="pasien_address" name="pasien_address" required>
+                                <input type="text" class="form-control" id="pasien_address" name="pasien_address"
+                                    required>
                                 <span class="invalid-feedback">Mohon Diisi</span>
-                                @error('pasien_address')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
                             </div>
                         </div>
 
                         {{-- status --}}
                         <div class="row mb-3">
-                            <label for="pasien_status" class="form-label col-md-4">Status Pasien</label>
+                            <label for="pasien_status" class="form-label col-md-4">
+                                Status Pasien <small class="text-danger">*</small>
+                            </label>
                             <div class="col-md-8">
                                 <select class="form-select" id="pasien_status" name="pasien_status" required>
-                                    <option selected disabled value="">Pilih status</option>
+                                    <option selected disabled value="">
+                                        Pilih status <small class="text-danger">*</small>
+                                    </option>
                                     <option value="1">Umum</option>
                                     <option value="2">BPJS</option>
                                 </select>
@@ -135,21 +135,48 @@
 
                     </div>
                     <div class="col-md-6">
+                        @if (request()->unit != 'd')
+                        {{-- room --}}
+                        <div class="row mb-3">
+                            <label for="pasien_room" class="form-label col-md-4">
+                                Ruangan <small class="text-danger">*</small>
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="pasien_room" name="pasien_room" required>
+                                <span class="invalid-feedback">Mohon Diisi</span>
+                            </div>
+                        </div>
+                        @endif
+
+                        {{-- Diagnosa --}}
+                        @if (request()->unit == 'd')
+                        <div class="row mb-3">
+                            <label for="pasien_diagnoses" class="form-label col-md-4">
+                                Diagnosa <small class="text-danger">*</small>
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="pasien_diagnoses" name="pasien_diagnoses"
+                                    required>
+                                <span class="invalid-feedback">Mohon Diisi</span>
+                            </div>
+                        </div>
+                        @endif
+
                         {{-- date in --}}
                         <div class="row mb-3">
                             @if (request()->unit == 'a' || request()->unit == 'd')
-                            <label for="pasien_in" class="form-label col-md-4">Tanggal Berobat</label>
+                            <label for="pasien_in" class="form-label col-md-4">
+                                Tanggal Berobat <small class="text-danger">*</small>
+                            </label>
                             @else
-                            <label for="pasien_in" class="form-label col-md-4">Tanggal Masuk</label>
+                            <label for="pasien_in" class="form-label col-md-4">
+                                Tanggal Masuk <small class="text-danger">*</small>
+                            </label>
                             @endif
                             <div class="col-md-8">
-                                <input type="datetime-local"
-                                    class="form-control @error('pasien_in') is-invalid @enderror" id="pasien_in"
-                                    name="pasien_in" required>
+                                <input type="datetime-local" class="form-control" id="pasien_in" name="pasien_in"
+                                    required>
                                 <span class="invalid-feedback">Mohon Diisi</span>
-                                @error('pasien_in')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
                             </div>
                         </div>
 
@@ -158,13 +185,7 @@
                         <div class="row mb-3">
                             <label for="pasien_out" class="form-label col-md-4">Tanggal Keluar</label>
                             <div class="col-md-8">
-                                <input type="datetime-local"
-                                    class="form-control @error('pasien_out') is-invalid @enderror" id="pasien_out"
-                                    name="pasien_out" required>
-                                <span class="invalid-feedback">Mohon Diisi</span>
-                                @error('pasien_out')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
+                                <input type="datetime-local" class="form-control" id="pasien_out" name="pasien_out">
                             </div>
                         </div>
 
@@ -172,41 +193,7 @@
                         <div class="row mb-3">
                             <label for="pasien_sum" class="form-label col-md-4">Jumlah HP</label>
                             <div class="col-md-8">
-                                <input type="text" class="form-control @error('pasien_sum') is-invalid @enderror"
-                                    id="pasien_sum" name="pasien_sum" required>
-                                <span class="invalid-feedback">Mohon Diisi</span>
-                                @error('pasien_sum')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-                        @endif
-
-                        @if (request()->unit != 'd')
-                        {{-- room --}}
-                        <div class="row mb-3">
-                            <label for="pasien_room" class="form-label col-md-4">Ruangan</label>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control @error('pasien_room') is-invalid @enderror"
-                                    id="pasien_room" name="pasien_room" required>
-                                <span class="invalid-feedback">Mohon Diisi</span>
-                                @error('pasien_room')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-                        @endif
-
-                        @if (request()->unit == 'd')
-                        <div class="row mb-3">
-                            <label for="pasien_diagnoses" class="form-label col-md-4">Diagnosa</label>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control @error('pasien_diagnoses') is-invalid @enderror"
-                                    id="pasien_diagnoses" name="pasien_diagnoses" required>
-                                <span class="invalid-feedback">Mohon Diisi</span>
-                                @error('pasien_diagnoses')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
+                                <input type="text" class="form-control" id="pasien_sum" name="pasien_sum">
                             </div>
                         </div>
                         @endif
@@ -829,18 +816,34 @@
     })
 
     /**
+     * get sum HP
+     */
+    $('#pasien_out').on('change', function () {
+        let star = $('#pasien_in').val();
+        let end = $('#pasien_out').val();
+        if (star && end) {
+            let startDate = new Date(star);
+            let endDate = new Date(end);
+            let diffTime = Math.abs(endDate - startDate);
+            let diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
+            $('#pasien_sum').val(diffDays);
+        } else {
+            $('#pasien_sum').val('');
+        }
+
+    })
+    /**
      * validasi form
      * @returns {boolean}
      */ 
     function validasiForm() {
         let fields = [
+            { id: '#pasien_nik', pesan: 'NIK pasien mohon diisi' },
             { id: '#pasien_name', pesan: 'Nama pasien mohon diisi' },
             { id: '#pasien_age', pesan: 'Umur pasien mohon diisi' },
             { id: '#pasien_address', pesan: 'Alamat pasien mohon diisi' },
             { id: '#pasien_status', pesan: 'Status pasien mohon dipilih', isSelect: true }, // Tambahkan flag isSelect
             { id: '#pasien_in', pesan: 'Tanggal Masuk mohon diisi' },
-            { id: '#pasien_out', pesan: 'Tanggal Keluar mohon diisi' },
-            { id: '#pasien_sum', pesan: 'JUmlah HP mohon diisi' },
             { id: '#pasien_room', pesan: 'Ruangan pasien mohon diisi' },
             { id: '#pasien_diagnoses', pesan: 'Diagnosa pasien mohon diisi' }
         ];

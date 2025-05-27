@@ -32,12 +32,14 @@ class NoteController extends Controller
      */
     public function create(Request $request)
     {
-        /**
-         * get actions
-         * 1. kategori_1
-         * 2. kategori_2
-         * 3. kategori_3
-         * */
+        // cache all models for 120 seconds
+        $cacheall = fn($model, $key) => Cache::remember(
+            $key,
+            120,
+            fn() => $model::all()
+        );
+
+        // cache actions by category
         $actions = Cache::remember('actions', 120, function () {
             $allActions = Action::all();
             return [
@@ -48,15 +50,15 @@ class NoteController extends Controller
         });
 
         return view('note.table', [
-            'emergencies' => Cache::remember('emergencies', 120, fn() => Emergency::all()),
-            'rooms' => Cache::remember('rooms', 120, fn() => Room::all()),
-            'laboratories' => Cache::remember('laboratories', 120, fn() => Laboratory::all()),
+            'emergencies' => $cacheall(Emergency::class, 'emergencies'),
+            'rooms' => $cacheall(Room::class, 'rooms'),
+            'laboratories' => $cacheall(Laboratory::class, 'laboratories'),
             'actions' => $actions['kategori_1'],
             'midwives' => $actions['kategori_2'],
             'teeth' => $actions['kategori_3'],
-            'suports' => Cache::remember('suports', 120, fn() => Suport::all()),
-            'tools' => Cache::remember('tools', 120, fn() => Tool::all()),
-            'medicines' => Cache::remember('medicines', 120, fn() => Medicine::all()),
+            'suports' => $cacheall(Suport::class, 'suports'),
+            'tools' => $cacheall(Tool::class, 'tools'),
+            'medicines' => $cacheall(Medicine::class, 'medicines'),
         ]);
     }
 
@@ -66,37 +68,39 @@ class NoteController extends Controller
     public function store(Request $request)
     {
         $unit = strtoupper($request->note_unit);
+        $currentYear = now()->year;
         $no =
-            Pasien::whereYear('created_at', now('y'))
-                ->where('pasien_nomor', 'LIKE', "%$request->note_unit%")
+            Pasien::whereYear('created_at', $currentYear)
+                ->where('pasien_nomor', 'LIKE', "%$unit%")
                 ->count() + 1;
-        $nomor =
-            $unit .
-            str_pad($no, 3, '0', STR_PAD_LEFT) .
-            '/' .
-            Carbon::now()->year;
+        $nomor = sprintf('%s%04d/%d', $unit, $no, $currentYear);
 
-        $pasienId = Pasien::insertGetId([
-            'pasien_nomor' => $nomor,
-            'pasien_name' => $request->pasien_name,
-            'pasien_age' => $request->pasien_age,
-            'pasien_address' => $request->pasien_address,
-            'pasien_status' => $request->pasien_status,
-            'pasien_in' => $request->pasien_in,
-            'pasien_out' => $request->pasien_out,
-            'pasien_sum' => $request->pasien_sum,
-            'pasien_room' => $request->pasien_room,
-            'pasien_diagnoses' => $request->pasien_diagnoses,
-            'created_at' => now(),
-        ]);
+        $pasien = Pasien::updateOrCreate(
+            [
+                'pasien_nomor' => $nomor,
+            ],
+            [
+                'pasien_nik' => $request->pasien_nik,
+                'pasien_name' => $request->pasien_name,
+                'pasien_age' => $request->pasien_age,
+                'pasien_address' => $request->pasien_address,
+                'pasien_status' => $request->pasien_status,
+                'pasien_in' => $request->pasien_in,
+                'pasien_out' => $request->pasien_out,
+                'pasien_sum' => $request->pasien_sum,
+                'pasien_room' => $request->pasien_room,
+                'pasien_diagnoses' => $request->pasien_diagnoses,
+            ]
+        );
+        $pasienId = $pasien->id;
 
         foreach ($request->note_category as $key => $cartegory) {
             Note::create([
                 'pasien_id' => $pasienId,
+                'note_date' => now(),
                 'note_category' => $cartegory,
                 'note_name' => $request->note_name[$key],
                 'note_price' => $request->note_price[$key],
-                'created_at' => now(),
             ]);
         }
 
