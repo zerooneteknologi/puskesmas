@@ -128,28 +128,36 @@
             <!-- Tabel Pertama -->
             <table>
                 <tr>
-                    <th>Nama</th>
+                    <th>Nomor</th>
                     <td style="width: 10%">:</td>
-                    <td>{{ $pasien->pasien_name }}</td>
+                    <td>{{ $pasien->pasien_nomor }}</td>
                     <th>Tanggal Dirawat</th>
                     <td style="width: 10%">:</td>
                     <td>{{ $pasien->pasien_in}}</td>
                 </tr>
                 <tr>
-                    <th>Umur</th>
+                    <th>Nama</th>
                     <td style="width: 10%">:</td>
-                    <td>{{ $pasien->pasien_age}}</td>
+                    <td>{{ $pasien->pasien_name }}</td>
                     <th>Tanggal Keluar</th>
                     <td style="width: 10%">:</td>
                     <td>{{ $pasien->pasien_out}}</td>
                 </tr>
                 <tr>
-                    <th>Alamat</th>
+                    <th>Umur</th>
                     <td style="width: 10%">:</td>
-                    <td>{{ $pasien->pasien_address}}</td>
+                    <td>{{ $pasien->pasien_age}}</td>
                     <th>Jumlah HP</th>
                     <td style="width: 10%">:</td>
                     <td>{{ $pasien->pasien_sum}}</td>
+                </tr>
+                <tr>
+                    <th>Alamat</th>
+                    <td style="width: 10%">:</td>
+                    <td>{{ $pasien->pasien_address}}</td>
+                    <th>Ruangan</th>
+                    <td style="width: 10%">:</td>
+                    <td>{{ $pasien->pasien_room}}</td>
                 </tr>
                 <tr>
                     <th>Status</th>
@@ -160,9 +168,6 @@
                         BPJS
                         @endif
                     </td>
-                    <th>Ruangan</th>
-                    <td style="width: 10%">:</td>
-                    <td>{{ $pasien->pasien_room}}</td>
                 </tr>
                 <tr>
                     <th>Diagnosa</th>
@@ -176,6 +181,7 @@
             <table>
                 <tr>
                     <th style="width: 5%">No</th>
+                    <th>Tanggal</th>
                     <th>Rincian</th>
                     <th>Harga</th>
                 </tr>
@@ -187,6 +193,7 @@
 
                 <tr>
                     <th rowspan="{{ $notes->count() + 1}} " style="text-align: center">{{ $loop->iteration }}</th>
+                    <th></th>
                     <th>
                         @if ($category == 1)
                         UGD
@@ -212,22 +219,26 @@
                         @if ($category == 8)
                         Tindakan Kebidanan
                         @endif
+                        @if ($category == 9)
+                        Tindakan Gigi
+                        @endif
                     </th>
                     <th>Rp. {{ number_format($notes->sum('note_price'),2,",",".") }}</th>
                 </tr>
                 @foreach ($notes as $note)
                 <tr>
+                    <td>{{ $note->note_date }}</td>
                     <td>{{ $note->note_name}}</td>
                     <td>Rp. {{ number_format($note->note_price, 2, ",",".") }}</td>
                 </tr>
                 @endforeach
                 @endforeach
                 <tr>
-                    <th colspan="2" style="text-align: right">Jumlah</th>
+                    <th colspan="3" style="text-align: right;">Jumlah</th>
                     <th>Rp. {{ number_format($pasien->notes->sum('note_price'), 2, ",",".")}}</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: right">Diskon (%)</td>
+                    <td colspan="3" style="text-align: right">Diskon (%)</td>
                     <td>{{ $pasien->pasien_discount}}</td>
                 </tr>
                 @php
@@ -235,7 +246,7 @@
                 $pasien->pasien_discount /100);
                 @endphp
                 <tr>
-                    <th colspan="2" style="text-align: right">Total</th>
+                    <th colspan="3" style="text-align: right">Total</th>
                     <th>Rp. {{ number_format($price, 2, ",",".") }}</th>
                 </tr>
             </table>
@@ -254,9 +265,9 @@
                 </tr>
                 <tr>
                     <td>
-                        <p style="text-align: center">Bendahara,</p>
+                        <p style="text-align: center">Petugas,</p>
                         <div style="margin-bottom: 60px"></div>
-                        <p style="text-align: center">( <b>{{ $signatur['personnel_treasurer']}}</b> )</p>
+                        <p style="text-align: center">(_________________________)</p>
                     </td>
                     <td>
                         <p style="text-align: center">Keluarga Pasien</p>
