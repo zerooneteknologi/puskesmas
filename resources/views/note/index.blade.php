@@ -3,16 +3,6 @@
 
 @section('content')
 
-<div class="pagetitle">
-    <h1>Nota Pembayaran</h1>
-    <nav>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
-            <li class="breadcrumb-item active">Nota</li>
-        </ol>
-    </nav>
-</div><!-- End Page Title -->
-
 <style>
     #spinner {
         position: fixed;
@@ -48,7 +38,34 @@
             transform: rotate(360deg);
         }
     }
+
+    .search-container {
+        max-width: 400px;
+        margin: 20px auto;
+    }
 </style>
+
+<!-- Page Title -->
+<div class="pagetitle d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Nota Pembayaran</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
+                <li class="breadcrumb-item active">Nota</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="input-group search-container">
+        <input type="text" class="form-control rounded-pill" placeholder="Cari pasien..." id="searchInput"
+            autocomplete="off" data-bs-toggle="dropdown" aria-expanded="false" name="search">
+        <ul class="dropdown-menu w-100" id="searchResults" style="max-height:200px; overflow-y:auto;"></ul>
+    </div>
+
+</div><!-- End Page Title -->
+
+
 <section class="section">
     <!-- Custom Styled Validation -->
     <form class="g-3 needs-validation" method="POST" action="{{ route('note.store')}}" novalidate>
@@ -895,5 +912,51 @@
     
         return true; // Izinkan pengiriman form jika semua field valid
     }
+
+    //search pasien
+    $(document).ready(function() {
+        $('#searchInput').on('input', function() {
+            let searchTerm = $(this).val();
+            $.ajax({
+                url: "{{ route('note.search') }}",
+                method: "GET",
+                data: { search: searchTerm },
+                success: function(data) {
+                    // console.log(data);
+                    // Update the dropdown with the search results
+                    $('#searchResults').empty();
+                    if (data.length > 0) {
+                        data.forEach(function(item) {
+                            $('#searchResults').append(
+                                `<li><a class="dropdown-item" href="#"
+                                    data-name="${item.pasien_name}"
+                                    data-nik="${item.pasien_nik}" 
+                                    data-age="${item.pasien_age}"
+                                    data-address="${item.pasien_address}"
+                                    data-status="${item.pasien_status}"
+                                    data-room="${item.pasien_room}"
+                                    data-in="${item.pasien_in}">${item.pasien_nomor}.${item.pasien_nik} - ${item.pasien_name}</a></li>`
+                            );
+                        });
+                    } else {
+                        $('#searchResults').append('<li><a class="dropdown-item" href="#">Tidak ada hasil</a></li>');
+                    }
+                    
+                    // select pasien from dropdown
+                    $('#searchResults a').on('click', function() {
+                        $('#pasien_nik').val($(this).data('nik'));
+                        $('#pasien_name').val($(this).data('name'));
+                        $('#pasien_age').val($(this).data('age'));
+                        $('#pasien_address').val($(this).data('address'));
+                        $('#pasien_status').val($(this).data('status'));
+                        $('#pasien_room').val($(this).data('room'));
+                        $('#pasien_in').val($(this).data('in'));
+                        $('#searchInput').val($(this).text());
+                        $('#searchResults').empty(); // Clear results after selection
+                    });
+                }
+            });
+        });
+    });
 </script>
 @endpush

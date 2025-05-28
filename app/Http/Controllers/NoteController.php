@@ -140,4 +140,16 @@ class NoteController extends Controller
     {
         //
     }
+    /**
+     * Search for notes based on the search term.
+     */
+    public function search(Request $request)
+    {
+        $pasiens = Pasien::latest()
+            ->search($request->search)
+            ->limit(10)
+            ->get();
+
+        return response()->json($pasiens);
+    }
 }

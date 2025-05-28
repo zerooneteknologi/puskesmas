@@ -40,4 +40,9 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('pasien', PasienController::class);
     Route::get('filter', [PasienController::class, 'filter']);
 });
-Route::resource('note', NoteController::class)->middleware(['auth']);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('note', NoteController::class);
+    Route::get('search', [NoteController::class, 'search'])->name(
+        'note.search'
+    );
+});
