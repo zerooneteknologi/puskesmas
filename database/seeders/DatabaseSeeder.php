@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             // MedicineSeeder::class,
             // SuportSeeder::class,
             // PasienSeeder::class,
+            // NoteSeeder::class,
         ]);
     }
 }

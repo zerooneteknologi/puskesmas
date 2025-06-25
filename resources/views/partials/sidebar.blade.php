@@ -62,15 +62,48 @@
                 <span>Pemeriksaan Penunjang</span>
             </a>
         </li><!-- End suport Nav -->
-        @endif
 
         <li class="nav-heading">Laporan</li>
         <li class="nav-item">
             <a class="nav-link {{ request()->is('pasien')  ? '' : 'collapsed' }}" href="{{ route('pasien.index')}}">
-                <i class="bi bi-clipboard2-pulse"></i>
-                <span>Laporan Pasien</span>
+                <i class="bi bi-journal-text"></i>
+                <span>Data Pasien</span>
             </a>
-        </li><!-- End suport Nav -->
+        </li><!-- End Data Pasien Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('report') && request()->query('unit') === 'a' ? '' : 'collapsed' }}"
+                href="{{ route('report.index')}}?unit=a">
+                <i class="bi bi-journal-text"></i>
+                <span>Nota Rawat Jalan</span>
+            </a>
+        </li><!-- End Data Nota Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('report') && request()->query('unit') === 'b' ? '' : 'collapsed' }}"
+                href="{{ route('report.index')}}?unit=b">
+                <i class="bi bi-journal-text"></i>
+                <span>Nota Rawat Inap</span>
+            </a>
+        </li><!-- End Data Nota Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('report') && request()->query('unit') === 'c' ? '' : 'collapsed' }}"
+                href="{{ route('report.index')}}?unit=c">
+                <i class="bi bi-journal-text"></i>
+                <span>Nota PONED</span>
+            </a>
+        </li><!-- End Data Nota Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('report') && request()->query('unit') === 'd' ? '' : 'collapsed' }}"
+                href="{{ route('report.index')}}?unit=d">
+                <i class="bi bi-journal-text"></i>
+                <span>Nota UGD</span>
+            </a>
+        </li><!-- End Data Nota Nav -->
+
+        @endif
 
         <li class="nav-heading">Buat Nota</li>
         <li class="nav-item">
@@ -100,12 +133,10 @@
         <li class="nav-item">
             <a class="nav-link {{ request()->is('note') && request()->query('unit') === 'd' ? '' : 'collapsed' }}"
                 href="{{ route('note.index')}}?unit=d">
-                <i class="bi bi-hospital"></i>
+                <i class="bi bi-person-gear"></i>
                 <span>UGD</span>
             </a>
         </li><!-- End suport Nav -->
-
-
 
     </ul>
 

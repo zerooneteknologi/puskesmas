@@ -8,6 +8,7 @@ use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\PasienController;
 use App\Http\Controllers\PersonnelController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SuportController;
 use App\Http\Controllers\ToolController;
@@ -39,6 +40,7 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('bill', BillController::class);
     Route::resource('pasien', PasienController::class);
     Route::get('filter', [PasienController::class, 'filter']);
+    Route::resource('report', ReportController::class);
 });
 Route::middleware(['auth'])->group(function () {
     Route::resource('note', NoteController::class);
