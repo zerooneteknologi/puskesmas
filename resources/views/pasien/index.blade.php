@@ -226,11 +226,35 @@
             info: false,
             paging: false,
             searching: false,
-            dom: 'Bfrtip', // Menambahkan tombol ekspor
+            dom: 'Bfrtip',
             buttons: [
-            'excel', 'pdf', 'print' // Pilihan ekspor
+            {
+                extend: 'excel',
+                className: 'btn btn-success mb-3 me-2',
+                text: '<i class="bi bi-file-earmark-excel"></i> Excel'
+            },
+            {
+                extend: 'pdf',
+                className: 'btn btn-danger mb-3 me-2',
+                text: '<i class="bi bi-file-earmark-pdf"></i> PDF'
+            },
+            {
+                extend: 'print',
+                className: 'btn btn-primary mb-3 me-2',
+                text: '<i class="bi bi-printer"></i> Print'
+            }
             ],
         });
+
+        // Add a separate "Print All Notes" button on the right with a print icon
+        let printAllBtn = $('<button>')
+            .addClass('btn btn-primary mb-3 float-end')
+            .html('<i class="bi bi-printer me-1"></i> Nota')
+            .on('click', function() {
+                window.open('{{ route("pasien.print") }}', '_blank');
+            });
+
+        $('#pasienTable').before(printAllBtn);
     });
 </script>
 @endpush

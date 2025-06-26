@@ -112,4 +112,11 @@ class PasienController extends Controller
 
         return view('pasien.table', compact('pasiens'));
     }
+
+    public function print()
+    {
+        return view('pdf.noteall', [
+            'pasiens' => Pasien::with('notes')->get(),
+        ]);
+    }
 }

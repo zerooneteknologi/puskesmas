@@ -41,6 +41,9 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('pasien', PasienController::class);
     Route::get('filter', [PasienController::class, 'filter']);
     Route::resource('report', ReportController::class);
+    Route::get('print', [PasienController::class, 'print'])->name(
+        'pasien.print'
+    );
 });
 Route::middleware(['auth'])->group(function () {
     Route::resource('note', NoteController::class);

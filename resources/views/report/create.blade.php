@@ -53,7 +53,21 @@
             searching: false,
             dom: 'Bfrtip', // Menambahkan tombol ekspor
             buttons: [
-            'excel', 'pdf', 'print' // Pilihan ekspor
+            {
+            extend: 'excel',
+            className: 'btn btn-success mb-3 me-2',
+            text: '<i class="bi bi-file-earmark-excel"></i> Excel'
+            },
+            {
+            extend: 'pdf',
+            className: 'btn btn-danger mb-3 me-2',
+            text: '<i class="bi bi-file-earmark-pdf"></i> PDF'
+            },
+            {
+            extend: 'print',
+            className: 'btn btn-primary mb-3 me-2',
+            text: '<i class="bi bi-printer"></i> Print'
+            }
             ],
         });
     });
