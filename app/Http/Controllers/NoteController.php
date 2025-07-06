@@ -67,13 +67,18 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        $unit = strtoupper($request->note_unit);
-        $currentYear = now()->year;
-        $no =
-            Pasien::whereYear('created_at', $currentYear)
-                ->where('pasien_nomor', 'LIKE', "%$unit%")
-                ->count() + 1;
-        $nomor = sprintf('%s%04d/%d', $unit, $no, $currentYear);
+        // Validatte nomor pasien
+        if ($request->pasien_nomor) {
+            $nomor = $request->pasien_nomor;
+        } else {
+            $unit = strtoupper($request->note_unit);
+            $currentYear = now()->year;
+            $no =
+                Pasien::whereYear('created_at', $currentYear)
+                    ->where('pasien_nomor', 'LIKE', "%$unit%")
+                    ->count() + 1;
+            $nomor = sprintf('%s%04d/%d', $unit, $no, $currentYear);
+        }
 
         $pasien = Pasien::updateOrCreate(
             [
@@ -147,7 +152,6 @@ class NoteController extends Controller
     {
         $pasiens = Pasien::latest()
             ->search($request->search)
-            ->limit(10)
             ->get();
 
         return response()->json($pasiens);

@@ -57,11 +57,14 @@
         </nav>
     </div>
 
+    {{-- Search Input --}}
+    @if (request()->unit == 'b')
     <div class="input-group search-container">
         <input type="text" class="form-control rounded-pill" placeholder="Cari pasien..." id="searchInput"
             autocomplete="off" data-bs-toggle="dropdown" aria-expanded="false" name="search">
         <ul class="dropdown-menu w-100" id="searchResults" style="max-height:200px; overflow-y:auto;"></ul>
     </div>
+    @endif
 
 </div><!-- End Page Title -->
 
@@ -82,6 +85,9 @@
                         $randomValue = round(microtime(true) * 1000) . bin2hex(random_bytes(2));
                         @endphp
                         <input type="hidden" name="random_value" value="{{ $randomValue }}">
+
+                        {{-- nomor pasien --}}
+                        <input type="hidden" name="pasien_nomor" id="pasien_nomor">
 
                         {{-- nik --}}
                         <div class="row mb-3">
@@ -210,7 +216,7 @@
                         <div class="row mb-3">
                             <label for="pasien_sum" class="form-label col-md-4">Jumlah HP</label>
                             <div class="col-md-8">
-                                <input type="text" class="form-control" id="pasien_sum" name="pasien_sum">
+                                <input type="text" class="form-control" id="pasien_sum" name="pasien_sum" readonly>
                             </div>
                         </div>
                         @endif
@@ -929,6 +935,7 @@
                         data.forEach(function(item) {
                             $('#searchResults').append(
                                 `<li><a class="dropdown-item" href="#"
+                                    data-nomor="${item.pasien_nomor}"
                                     data-name="${item.pasien_name}"
                                     data-nik="${item.pasien_nik}" 
                                     data-age="${item.pasien_age}"
@@ -944,6 +951,7 @@
                     
                     // select pasien from dropdown
                     $('#searchResults a').on('click', function() {
+                        $('#pasien_nomor').val($(this).data('nomor'));
                         $('#pasien_nik').val($(this).data('nik'));
                         $('#pasien_name').val($(this).data('name'));
                         $('#pasien_age').val($(this).data('age'));
