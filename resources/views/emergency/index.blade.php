@@ -35,6 +35,9 @@
                     <button type="button" class="btn btn-secondary float-end mt-3 btn-add">
                         <i class="bi bi-plus me-1"></i> Tambah
                     </button>
+                    <button type="button" class="btn btn-success float-end mt-3 me-2 btn-import">
+                        <i class="bi bi-upload me-1"></i> Import
+                    </button>
                 </div>
             </div>
             <!-- Table with stripped rows -->
@@ -89,14 +92,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!-- General Form Elements -->
-            <form method="POST" action="" class="g-3 needs-validation" class="modal-form" novalidate>
+            <form method="POST" action="" class="g-3 needs-validation" class="modal-form" enctype="multipart/form-data"
+                novalidate>
                 @csrf
 
                 <input type="hidden" name="_method" class="method">
 
                 <div class="modal-body">
-                    <div class="row mb-3">
-                        <label for="emergency_name" class="col-sm-2 col-form-label">Nama</label>
+                    {{-- name --}}
+                    <div class="row mb-3" id="emergencyName" style="display: none;">
+                        <label for="emergency_name" class="col-sm-2 col-form-label">Nama UGD</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control @error('emergency_name') is-invalid @enderror"
                                 id="emergency_name" name="emergency_name">
@@ -106,7 +111,8 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    {{-- price --}}
+                    <div class="row mb-3" id="emergencyPrice" style="display: none;">
                         <label for="numberInput" class="col-sm-2 col-form-label">Harga</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control @error('numberInput') is-invalid @enderror"
@@ -115,6 +121,17 @@
                             @error('emergency_price')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+                    </div>
+
+                    {{-- file --}}
+                    <div class="row mb-3" id="emergencyFile" style="display: none;">
+                        <label for="emergency_file" class="col-sm-2 col-form-label">File</label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control" id="emergency_file" name="emergency_file">
+                            <a href="{{ asset('file/ugd.xlsx') }}" class="btn btn-link mt-2" download>
+                                Download Template Import
+                            </a>
                         </div>
                     </div>
 
@@ -133,12 +150,29 @@
 @push('script')
 <script>
     /**
+    * show modal import
+    */
+    $('.btn-import').click(function (e) {
+        e.preventDefault();
+        $('.modal-title').html('Import UGD');
+        $('.modal-form').attr('action', "{{ route('emergency.store')}}")
+        $('.method').val('POST');
+        $('#emergencyName').css('display', 'none');
+        $('#emergencyPrice').css('display', 'none');
+        $('#emergencyFile').css('display', 'flex');
+        $('#emergencyModal').modal('show');
+    })
+
+    /**
     * show modal create
     */
     $('.btn-add').click(function (e) {
         $('.modal-title').html('Tambah perawatan UGD');
         $('.modal-form').attr('action', "{{ route('emergency.store')}}")
         $('.method').val('POST');
+        $('#emergencyName').css('display', 'flex');
+        $('#emergencyPrice').css('display', 'flex');
+        $('#emergencyFile').css('display', 'none');
         $('#emergency_name').val('');
         $('#emergency_price').val('');
         $('#emergencyModal').modal('show');

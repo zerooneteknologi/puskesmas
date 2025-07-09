@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SuportsImport;
 use App\Models\Suport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SuportController extends Controller
 {
@@ -38,13 +40,28 @@ class SuportController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $this->validateData($request);
+        if ($request->hasFile('suport_file')) {
+            $request->validate([
+                'suport_file' => 'required|file|mimes:xlsx,xls,csv',
+            ]);
 
-        Suport::create($validated);
+            Excel::import(new SuportsImport(), $request->file('suport_file'));
 
-        return redirect()
-            ->route('suport.index')
-            ->with('success', "Berhasil Menambahakan $request->suport_name !");
+            return redirect()
+                ->route('suport.index')
+                ->with('success', 'Berhasil Import Data Suport !');
+        } else {
+            $validated = $this->validateData($request);
+
+            Suport::create($validated);
+
+            return redirect()
+                ->route('suport.index')
+                ->with(
+                    'success',
+                    "Berhasil Menambahakan $request->suport_name !"
+                );
+        }
     }
 
     /**

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ActionsImport;
 use App\Models\Action;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ActionController extends Controller
 {
@@ -39,13 +41,28 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $this->validateData($request);
+        if ($request->hasFile('action_file')) {
+            $request->validate([
+                'action_file' => 'required|file|mimes:xlsx,xls,csv',
+            ]);
 
-        Action::create($validated);
+            Excel::import(new ActionsImport(), $request->file('action_file'));
 
-        return redirect()
-            ->route('action.index')
-            ->with('success', "Berhasil Menambahkan $request->action_name !");
+            return redirect()
+                ->route('action.index')
+                ->with('success', 'Berhasil mengimpor data tindakan!');
+        } else {
+            $validated = $this->validateData($request);
+
+            Action::create($validated);
+
+            return redirect()
+                ->route('action.index')
+                ->with(
+                    'success',
+                    "Berhasil Menambahkan $request->action_name !"
+                );
+        }
     }
 
     /**

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\RoomsImport;
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RoomController extends Controller
 {
@@ -38,13 +40,26 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $this->validateData($request);
+        if ($request->hasFile('room_file')) {
+            // Validate the uploaded file
+            $request->validate([
+                'room_file' => 'required|file|mimes:xlsx,csv',
+            ]);
+            // Import the file using the RoomsImport class
+            Excel::import(new RoomsImport(), $request->file('room_file'));
 
-        Room::create($validated);
+            return redirect()
+                ->route('room.index')
+                ->with('success', 'Berhasil import Perawatan Baru!');
+        } else {
+            $validated = $this->validateData($request);
 
-        return redirect()
-            ->route('room.index')
-            ->with('success', "Berhasil Menambahakan $request->room_name");
+            Room::create($validated);
+
+            return redirect()
+                ->route('room.index')
+                ->with('success', "Berhasil Menambahakan $request->room_name");
+        }
     }
 
     /**

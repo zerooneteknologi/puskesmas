@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ToolsImport;
 use App\Models\Tool;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ToolController extends Controller
 {
@@ -38,13 +40,24 @@ class ToolController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $this->validateDate($request);
+        if ($request->hasFile('tool_file')) {
+            $request->validate([
+                'tool_file' => 'required|file|mimes:xlsx,xls,csv',
+            ]);
 
-        Tool::create($validated);
+            Excel::import(new ToolsImport(), $request->file('tool_file'));
+            return redirect()
+                ->route('tool.index')
+                ->with('success', 'Berhasil mengimpor data peralatan!');
+        } else {
+            $validated = $this->validateDate($request);
 
-        return redirect()
-            ->route('tool.index')
-            ->with('success', "Berhasil Menambahkan $request->tool_name !");
+            Tool::create($validated);
+
+            return redirect()
+                ->route('tool.index')
+                ->with('success', "Berhasil Menambahkan $request->tool_name !");
+        }
     }
 
     /**

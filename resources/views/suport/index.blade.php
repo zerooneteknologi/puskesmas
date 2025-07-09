@@ -4,7 +4,7 @@
 @section('content')
 
 <div class="pagetitle">
-    <h1>Perawtan Penunjang</h1>
+    <h1>Perawatan Penunjang</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
@@ -29,11 +29,14 @@
 
             <div class="row">
                 <div class="col-6">
-                    <h5 class="card-title">Daftar Perawtan Penunjang</h5>
+                    <h5 class="card-title">Daftar Perawatan Penunjang</h5>
                 </div>
                 <div class="col-6">
                     <button type="button" class="btn btn-secondary float-end mt-3 btn-add">
                         <i class="bi bi-plus me-1"></i> Tambah
+                    </button>
+                    <button type="button" class="btn btn-success float-end mt-3 me-2 btn-import">
+                        <i class="bi bi-upload me-1"></i> Import
                     </button>
                 </div>
             </div>
@@ -88,14 +91,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!-- General Form Elements -->
-            <form method="POST" action="" class="g-3 needs-validation" class="modal-form" novalidate>
+            <form method="POST" action="" class="g-3 needs-validation" class="modal-form" enctype="multipart/form-data"
+                novalidate>
                 @csrf
 
                 <input type="hidden" name="_method" class="method">
 
                 <div class="modal-body">
-                    <div class="row mb-3">
-                        <label for="suport_name" class="col-sm-2 col-form-label">Nama</label>
+                    {{-- name --}}
+                    <div class="row mb-3" id="suportname" style="display: none">
+                        <label for="suport_name" class="col-sm-2 col-form-label">Nama Penunjang</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control @error('suport_name') is-invalid @enderror"
                                 id="suport_name" name="suport_name">
@@ -105,7 +110,8 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    {{-- price --}}
+                    <div class="row mb-3" id="suportprice" style="display: none">
                         <label for="numberInput" class="col-sm-2 col-form-label">Harga</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control @error('numberInput') is-invalid @enderror"
@@ -114,6 +120,18 @@
                             @error('suport_price')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+                    </div>
+
+                    {{-- file --}}
+                    <div class="row mb-3" id="suportfile" style="display: none">
+                        <label for="suport_file" class="col-sm-2 col-form-label">File</label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control @error('suport_file') is-invalid @enderror"
+                                id="suport_file" name="suport_file">
+                            <a href="{{ asset('file/penunjang.xlsx') }}" class="btn btn-link mt-2" download>
+                                <i class="bi bi-download"></i>Download Template
+                            </a>
                         </div>
                     </div>
 
@@ -138,8 +156,24 @@
         $('.modal-title').html('Tambah Penujang');
         $('.modal-form').attr('action', "{{ route('suport.store')}}")
         $('.method').val('POST');
+        $('#suportname').css('display', 'flex');
+        $('#suportprice').css('display', 'flex');
+        $('#suportfile').css('display', 'none');
         $('#suport_name').val('');
         $('#suport_price').val('');
+        $('#suportModal').modal('show');
+    })
+
+    /**
+     * show modal import
+     */
+    $('.btn-import').click(function (e) {
+        $('.modal-title').html('Import Penujang');
+        $('.modal-form').attr('action', "{{ route('suport.store')}}")
+        $('.method').val('POST');
+        $('#suportname').css('display', 'none');
+        $('#suportprice').css('display', 'none');
+        $('#suportfile').css('display', 'flex');
         $('#suportModal').modal('show');
     })
 

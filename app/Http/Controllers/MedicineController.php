@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\MedicinesImport;
 use App\Models\Medicine;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MedicineController extends Controller
 {
@@ -38,13 +40,30 @@ class MedicineController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $this->validateData($request);
+        if ($request->hasFile('medicine_file')) {
+            $request->validate([
+                'medicine_file' => 'required|file|mimes:xlsx,xls,csv',
+            ]);
 
-        Medicine::create($validated);
+            Excel::import(
+                new MedicinesImport(),
+                $request->file('medicine_file')
+            );
+            return redirect()
+                ->route('medicine.index')
+                ->with('success', 'Berhasil mengimpor data obat dari file!');
+        } else {
+            $validated = $this->validateData($request);
 
-        return redirect()
-            ->route('medicine.index')
-            ->with('success', "Berhasil Menambahkan $request->medicine_name !");
+            Medicine::create($validated);
+
+            return redirect()
+                ->route('medicine.index')
+                ->with(
+                    'success',
+                    "Berhasil Menambahkan $request->medicine_name !"
+                );
+        }
     }
 
     /**

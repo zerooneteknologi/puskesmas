@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\LaboratoriesImport;
 use App\Models\Laboratory;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LaboratoryController extends Controller
 {
@@ -38,6 +40,22 @@ class LaboratoryController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->hasFile('laboratory_file')) {
+            $request->validate([
+                'laboratory_file' => 'required|file|mimes:xlsx,xls,csv',
+            ]);
+
+            Excel::import(
+                new LaboratoriesImport(),
+                $request->file('laboratory_file')
+            );
+            return redirect()
+                ->route('laboratory.index')
+                ->with('success', 'Berhasil mengimpor data laboratorium');
+        } else {
+            # code...
+        }
+
         $validated = $this->vaidateData($request);
 
         Laboratory::create($validated);

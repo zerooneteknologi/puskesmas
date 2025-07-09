@@ -35,6 +35,9 @@
                     <button type="button" class="btn btn-secondary float-end mt-3 btn-add">
                         <i class="bi bi-plus me-1"></i> Tambah
                     </button>
+                    <button type="button" class="btn btn-success float-end mt-3 me-2 btn-import">
+                        <i class="bi bi-upload me-1"></i> Import
+                    </button>
                 </div>
             </div>
             <!-- Table with stripped rows -->
@@ -100,18 +103,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!-- General Form Elements -->
-            <form method="POST" action="" class="g-3 needs-validation" class="modal-form" novalidate>
+            <form method="POST" action="" class="g-3 needs-validation" class="modal-form" enctype="multipart/form-data"
+                novalidate>
                 @csrf
 
                 <input type="hidden" name="_method" class="method">
 
                 <div class="modal-body">
 
-                    <div class="row mb-3">
+                    <div class="row mb-3" id="actioncategory" style="display: none">
                         <label class="col-sm-2 col-form-label" for="action_category">Kategori</label>
                         <div class="col-sm-10">
                             <select class="form-select" aria-label="Default select example" id="action_category"
-                                name="action_category" required>
+                                name="action_category">
                                 <option value="">Pilih Kategori</option>
                                 <option value="1">Umum</option>
                                 <option value="2">PONED</option>
@@ -120,7 +124,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    <div class="row mb-3" id="actionname" style="display: none">
                         <label for="action_name" class="col-sm-2 col-form-label">Tindakan</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control @error('action_name') is-invalid @enderror"
@@ -131,7 +135,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    <div class="row mb-3" id="actionprice" style="display: none">
                         <label for="numberInput" class="col-sm-2 col-form-label">Harga</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control @error('numberInput') is-invalid @enderror"
@@ -140,6 +144,16 @@
                             @error('action_price')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-3" id="actionfile" style="display: none">
+                        <label for="action_file" class="col-sm-2 col-form-label">File</label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control" id="action_file" name="action_file">
+                            <a href="{{ asset('file/tindakan.xlsx') }}" class="btn btn-link mt-2" download>
+                                Download Template
+                            </a>
                         </div>
                     </div>
 
@@ -164,8 +178,27 @@
         $('.modal-title').html('Tambah Tindakan');
         $('.modal-form').attr('action', "{{ route('action.store')}}")
         $('.method').val('POST');
+        $('#actioncategory').css('display', 'flex');
+        $('#actionname').css('display', 'flex');
+        $('#actionprice').css('display', 'flex');
+        $('#actionfile').css('display', 'none');
+        $('#action_category').val('');
         $('#action_name').val('');
         $('#action_price').val('');
+        $('#actionModal').modal('show');
+    })
+    
+    /**
+     * show modal import
+     */
+    $('.btn-import').click(function (e) {
+        $('.modal-title').html('Import Tindakan');
+        $('.modal-form').attr('action', "{{ route('action.store')}}")
+        $('.method').val('POST');
+        $('#actioncategory').css('display', 'none');
+        $('#actionname').css('display', 'none');
+        $('#actionprice').css('display', 'none');
+        $('#actionfile').css('display', 'flex');
         $('#actionModal').modal('show');
     })
 

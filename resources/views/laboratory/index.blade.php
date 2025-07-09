@@ -35,6 +35,9 @@
                     <button type="button" class="btn btn-secondary float-end mt-3 btn-add">
                         <i class="bi bi-plus me-1"></i> Tambah
                     </button>
+                    <button type="button" class="btn btn-success float-end mt-3 me-2 btn-import">
+                        <i class="bi bi-upload me-1"></i> Import
+                    </button>
                 </div>
             </div>
             <!-- Table with stripped rows -->
@@ -88,14 +91,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!-- General Form Elements -->
-            <form method="POST" action="" class="g-3 needs-validation" class="modal-form" novalidate>
+            <form method="POST" action="" class="g-3 needs-validation" class="modal-form" enctype="multipart/form-data"
+                novalidate>
                 @csrf
 
                 <input type="hidden" name="_method" class="method">
 
                 <div class="modal-body">
-                    <div class="row mb-3">
-                        <label for="laboratory_name" class="col-sm-2 col-form-label">Nama</label>
+                    {{-- name --}}
+                    <div class="row mb-3" id="laboratoryname" style="display: none;">
+                        <label for="laboratory_name" class="col-sm-2 col-form-label">Nama Laboratorium</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control @error('laboratory_name') is-invalid @enderror"
                                 id="laboratory_name" name="laboratory_name">
@@ -105,15 +110,28 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    {{-- price --}}
+                    <div class="row mb-3" id="laboratoryprice" style="display: none;">
                         <label for="numberInput" class="col-sm-2 col-form-label">Harga</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control @error('numberInput') is-invalid @enderror"
-                                id="numberInput" name="numberInput" required>
+                                id="numberInput" name="numberInput">
                             <input type="hidden" id="laboratory_price" name="laboratory_price">
                             @error('laboratory_price')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+                    </div>
+
+                    {{-- file --}}
+                    <div class="row mb-3" id="laboratoryfile" style="display: none;">
+                        <label for="laboratory_file" class="col-sm-2 col-form-label">File</label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control @error('laboratory_file') is-invalid @enderror"
+                                id="laboratory_file" name="laboratory_file">
+                            <a href="{{ asset('file/laboratorium.xlsx') }}" class="btn btn-link mt-2" download>
+                                <i class="bi bi-download"></i> Download Template
+                            </a>
                         </div>
                     </div>
 
@@ -138,8 +156,23 @@
         $('.modal-title').html('Tambah Laboratorium');
         $('.modal-form').attr('action', "{{ route('laboratory.store')}}")
         $('.method').val('POST');
+        $('#laboratoryname').css('display', 'flex');
+        $('#laboratoryprice').css('display', 'flex');
+        $('#laboratoryfile').css('display', 'none');
         $('#laboratory_name').val('');
         $('#laboratory_price').val('');
+        $('#laboratoryModal').modal('show');
+    })
+    /**
+    * show modal import
+    */
+    $('.btn-import').click(function (e) {
+        $('.modal-title').html('Import Laboratorium');
+        $('.modal-form').attr('action', "{{ route('laboratory.store')}}")
+        $('.method').val('POST');
+        $('#laboratoryname').css('display', 'none');
+        $('#laboratoryprice').css('display', 'none');
+        $('#laboratoryfile').css('display', 'flex');
         $('#laboratoryModal').modal('show');
     })
 

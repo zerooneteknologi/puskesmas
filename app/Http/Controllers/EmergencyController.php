@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\EmergenciesImport;
 use App\Models\Emergency;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmergencyController extends Controller
 {
@@ -38,13 +40,27 @@ class EmergencyController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $this->validateData($request);
+        if ($request->hasFile('emergency_file')) {
+            $request->validate([
+                'emergency_file' => 'required|file|mimes:xlsx,csv',
+            ]);
 
-        Emergency::create($validated);
+            Excel::import(
+                new EmergenciesImport(),
+                $request->file('emergency_file')
+            );
+            return redirect()
+                ->route('emergency.index')
+                ->with('success', 'Berhasil import Perwatan UGD Baru!');
+        } else {
+            $validated = $this->validateData($request);
 
-        return redirect()
-            ->route('emergency.index')
-            ->with('success', 'Berhasil Menambahkan Perwatan UGD Baru!');
+            Emergency::create($validated);
+
+            return redirect()
+                ->route('emergency.index')
+                ->with('success', 'Berhasil Menambahkan Perwatan UGD Baru!');
+        }
     }
 
     /**
