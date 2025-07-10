@@ -91,26 +91,11 @@ class PasienController extends Controller
      */
     public function filter(Request $request)
     {
-        $pasiens = [];
-        if ($request->filter == 1) {
-            $pasiens = Pasien::whereDate('created_at', $request->date)->get();
-        }
-        if ($request->filter == 2) {
-            $pasiens = Pasien::where(
-                'created_at',
-                'LIKE',
-                "%$request->month%"
-            )->get();
-        }
-        if ($request->filter == 3) {
-            $pasiens = Pasien::where(
-                'created_at',
-                'LIKE',
-                "%$request->year%"
-            )->get();
-        }
+        $pasiens = Pasien::filter($request)->get();
 
-        return view('pasien.table', compact('pasiens'));
+        return view('pasien.table', [
+            'pasiens' => $pasiens,
+        ]);
     }
 
     public function print()

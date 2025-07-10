@@ -23,7 +23,7 @@ class PasienFactory extends Factory
             'pasien_age' => fake()->randomNumber(2, true),
             'pasien_address' => fake()->address(),
             'pasien_status' => rand(1, 2),
-            'pasien_in' => fake()->date(),
+            'pasien_in' => fake()->dateTimeThisMonth(),
         ];
     }
 }

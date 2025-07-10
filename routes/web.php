@@ -28,25 +28,51 @@ Route::get('/home', [
 ])->name('home');
 
 Route::middleware(['admin'])->group(function () {
-    Route::resource('user', UserController::class);
-    Route::resource('personnel', PersonnelController::class);
-    Route::resource('emergency', EmergencyController::class);
-    Route::resource('room', RoomController::class);
-    Route::resource('laboratory', LaboratoryController::class);
-    Route::resource('action', ActionController::class);
-    Route::resource('tool', ToolController::class);
-    Route::resource('medicine', MedicineController::class);
-    Route::resource('suport', SuportController::class);
-    Route::resource('bill', BillController::class);
-    Route::resource('pasien', PasienController::class);
+    Route::resource('user', UserController::class)->except(['show']);
+    Route::resource('personnel', PersonnelController::class)->only(['update']);
+    Route::resource('emergency', EmergencyController::class)->except([
+        'create',
+        'show',
+    ]);
+    Route::resource('room', RoomController::class)->except(['create', 'show']);
+    Route::resource('laboratory', LaboratoryController::class)->except([
+        'create',
+        'show',
+    ]);
+    Route::resource('action', ActionController::class)->except([
+        'create',
+        'show',
+    ]);
+    Route::resource('tool', ToolController::class)->except(['create', 'show']);
+    Route::resource('medicine', MedicineController::class)->except([
+        'create',
+        'show',
+    ]);
+    Route::resource('suport', SuportController::class)->except([
+        'create',
+        'show',
+    ]);
+    Route::resource('bill', BillController::class)->only(['store', 'destroy']);
+    Route::resource('pasien', PasienController::class)->except([
+        'store',
+        'edit',
+        'destroy',
+    ]);
     Route::get('filter', [PasienController::class, 'filter']);
-    Route::resource('report', ReportController::class);
+    Route::resource('report', ReportController::class)->only([
+        'index',
+        'create',
+    ]);
     Route::get('print', [PasienController::class, 'print'])->name(
         'pasien.print'
     );
 });
 Route::middleware(['auth'])->group(function () {
-    Route::resource('note', NoteController::class);
+    Route::resource('note', NoteController::class)->only([
+        'index',
+        'create',
+        'store',
+    ]);
     Route::get('search', [NoteController::class, 'search'])->name(
         'note.search'
     );
