@@ -21,7 +21,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+// This route is for unauthenticated admin only
 Route::get('/home', [
     App\Http\Controllers\HomeController::class,
     'index',
@@ -52,13 +52,7 @@ Route::middleware(['admin'])->group(function () {
         'create',
         'show',
     ]);
-    Route::resource('bill', BillController::class)->only(['store', 'destroy']);
-    Route::resource('pasien', PasienController::class)->except([
-        'store',
-        'edit',
-        'destroy',
-    ]);
-    Route::get('filter', [PasienController::class, 'filter']);
+
     Route::resource('report', ReportController::class)->only([
         'index',
         'create',
@@ -67,7 +61,14 @@ Route::middleware(['admin'])->group(function () {
         'pasien.print'
     );
 });
+// This route is for authenticated users only
 Route::middleware(['auth'])->group(function () {
+    Route::resource('bill', BillController::class)->only(['store', 'destroy']);
+    Route::get('filter', [PasienController::class, 'filter']);
+    Route::resource('pasien', PasienController::class)->except([
+        'store',
+        'edit',
+    ]);
     Route::resource('note', NoteController::class)->only([
         'index',
         'create',

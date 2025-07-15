@@ -65,19 +65,12 @@
 
         <li class="nav-heading">Laporan</li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('pasien')  ? '' : 'collapsed' }}" href="{{ route('pasien.index')}}">
-                <i class="bi bi-journal-text"></i>
-                <span>Data Pasien</span>
-            </a>
-        </li><!-- End Data Pasien Nav -->
-
-        <li class="nav-item">
             <a class="nav-link {{ request()->is('report') && request()->query('unit') === 'a' ? '' : 'collapsed' }}"
                 href="{{ route('report.index')}}?unit=a">
                 <i class="bi bi-journal-text"></i>
                 <span>Nota Rawat Jalan</span>
             </a>
-        </li><!-- End Data Nota Nav -->
+        </li><!-- End Data Rawat Jalan Nav -->
 
         <li class="nav-item">
             <a class="nav-link {{ request()->is('report') && request()->query('unit') === 'b' ? '' : 'collapsed' }}"
@@ -85,7 +78,7 @@
                 <i class="bi bi-journal-text"></i>
                 <span>Nota Rawat Inap</span>
             </a>
-        </li><!-- End Data Nota Nav -->
+        </li><!-- End Data Rawat Inap Nav -->
 
         <li class="nav-item">
             <a class="nav-link {{ request()->is('report') && request()->query('unit') === 'c' ? '' : 'collapsed' }}"
@@ -93,7 +86,7 @@
                 <i class="bi bi-journal-text"></i>
                 <span>Nota PONED</span>
             </a>
-        </li><!-- End Data Nota Nav -->
+        </li><!-- End Data PONED Nav -->
 
         <li class="nav-item">
             <a class="nav-link {{ request()->is('report') && request()->query('unit') === 'd' ? '' : 'collapsed' }}"
@@ -101,9 +94,24 @@
                 <i class="bi bi-journal-text"></i>
                 <span>Nota UGD</span>
             </a>
-        </li><!-- End Data Nota Nav -->
+        </li><!-- End Data UGD Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('report') && request()->query('unit') === 'e' ? '' : 'collapsed' }}"
+                href="{{ route('report.index')}}?unit=e">
+                <i class="bi bi-journal-text"></i>
+                <span>Nota PUSTU</span>
+            </a>
+        </li><!-- End Data PUSTU Nav -->
 
         @endif
+
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('pasien')  ? '' : 'collapsed' }}" href="{{ route('pasien.index')}}">
+                <i class="bi bi-journal-text"></i>
+                <span>Data Pasien</span>
+            </a>
+        </li><!-- End Data Pasien Nav -->
 
         <li class="nav-heading">Buat Nota</li>
         <li class="nav-item">
@@ -112,7 +120,7 @@
                 <i class="bi bi-clipboard2-pulse"></i>
                 <span>Rawat Jalan</span>
             </a>
-        </li><!-- End suport Nav -->
+        </li><!-- End Rawat Jalan Nav -->
 
         <li class="nav-item">
             <a class="nav-link {{ request()->is('note') && request()->query('unit') === 'b' ? '' : 'collapsed' }}"
@@ -120,7 +128,7 @@
                 <i class="bi bi-building"></i>
                 <span>Rawat Inap</span>
             </a>
-        </li><!-- End suport Nav -->
+        </li><!-- End Rawat Inap Nav -->
 
         <li class="nav-item">
             <a class="nav-link {{ request()->is('note') && request()->query('unit') === 'c' ? '' : 'collapsed' }}"
@@ -128,7 +136,7 @@
                 <i class="bi bi-person-gear"></i>
                 <span>PONED</span>
             </a>
-        </li><!-- End suport Nav -->
+        </li><!-- End PONED Nav -->
 
         <li class="nav-item">
             <a class="nav-link {{ request()->is('note') && request()->query('unit') === 'd' ? '' : 'collapsed' }}"
@@ -136,7 +144,15 @@
                 <i class="bi bi-person-gear"></i>
                 <span>UGD</span>
             </a>
-        </li><!-- End suport Nav -->
+        </li><!-- End UGD Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('note') && request()->query('unit') === 'e' ? '' : 'collapsed' }}"
+                href="{{ route('note.index')}}?unit=e">
+                <i class="bi bi-person-gear"></i>
+                <span>PUSTU</span>
+            </a>
+        </li><!-- End PUSTU Nav -->
 
     </ul>
 

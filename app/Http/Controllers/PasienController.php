@@ -83,7 +83,11 @@ class PasienController extends Controller
      */
     public function destroy(Pasien $pasien)
     {
-        //
+        $pasien->delete();
+
+        return redirect()
+            ->route('pasien.index')
+            ->with('success', 'Data pasien berhasil dihapus');
     }
 
     /**
