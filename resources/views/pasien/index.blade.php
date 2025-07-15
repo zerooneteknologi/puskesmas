@@ -71,7 +71,7 @@
             </form>
         </div>
 
-        <div id="tableTapsien">
+        <div class="table-responsive">
             <!-- Table with stripped rows -->
             <table class="table datatable table-hover" id="pasienTable">
                 <thead>
@@ -178,6 +178,47 @@
 
 @push('script')
 <script>
+    $(document).ready(function() {
+        filter();
+        let userRoll = {{ auth()->user()->role_id}};
+        if (userRoll === 1) {
+            $('#pasienTable').DataTable({
+            ordering: false,
+            info: false,
+            paging: false,
+            searching: false,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                extend: 'excel',
+                className: 'btn btn-success mb-3 me-2',
+                text: '<i class="bi bi-file-earmark-excel"></i> Excel'
+                },
+                {
+                extend: 'pdf',
+                className: 'btn btn-danger mb-3 me-2',
+                text: '<i class="bi bi-file-earmark-pdf"></i> PDF'
+                },
+                {
+                extend: 'print',
+                className: 'btn btn-primary mb-3 me-2',
+                text: '<i class="bi bi-printer"></i> Print'
+                }
+            ],
+            });
+        
+            // Add a separate "Print All Notes" button on the right with a print icon
+            let printAllBtn = $('<button>')
+                .addClass('btn btn-primary mb-3 float-end')
+                .html('<i class="bi bi-printer me-1"></i> Nota')
+                .on('click', function() {
+                window.open('{{ route("pasien.print") }}', '_blank');
+                });
+            
+                $('#pasienTable').before(printAllBtn);
+        }
+    });
+
     function discount(id, nomor, name, age, address, status, pasienIn, out, sum, room, diagnoses, discount) {
             $('#pasien_id').val(id);
             $('#pasien_nomor').val(nomor);
@@ -214,14 +255,14 @@
         </div>
     `);
     loadingDiv.hide();
-    $('#tableTapsien').before(loadingDiv);
+    $('#pasienTable').before(loadingDiv);
 
     function filter() {
         clearTimeout(filterTimeout);
         filterTimeout = setTimeout(function() {
             $('#loadingPasien').show();
             $.get('/filter', $('#form').serialize(), function(e) {
-                $('#tableTapsien').html(e);
+                $('#pasienTable').html(e);
                 $('#loadingPasien').hide();
             });
         }, 300); // debounce 300ms
@@ -229,44 +270,6 @@
 
     $('#date, #month, #year').on('change input', filter);
 
-    $(document).ready(function() {
-        let userRoll = {{ auth()->user()->role_id}};
-        if (userRoll === 1) {
-            $('#pasienTable').DataTable({
-                ordering: false,
-                info: false,
-                paging: false,
-                searching: false,
-                dom: 'Bfrtip',
-                buttons: [
-                    {
-                    extend: 'excel',
-                    className: 'btn btn-success mb-3 me-2',
-                    text: '<i class="bi bi-file-earmark-excel"></i> Excel'
-                    },
-                    {
-                    extend: 'pdf',
-                    className: 'btn btn-danger mb-3 me-2',
-                    text: '<i class="bi bi-file-earmark-pdf"></i> PDF'
-                    },
-                    {
-                    extend: 'print',
-                    className: 'btn btn-primary mb-3 me-2',
-                    text: '<i class="bi bi-printer"></i> Print'
-                    }
-                ],
-            });
-
-            // Add a separate "Print All Notes" button on the right with a print icon
-            let printAllBtn = $('<button>')
-                .addClass('btn btn-primary mb-3 float-end')
-                .html('<i class="bi bi-printer me-1"></i> Nota')
-                .on('click', function() {
-                window.open('{{ route("pasien.print") }}', '_blank');
-                });
-            
-                $('#pasienTable').before(printAllBtn);
-        }
-    });
+    
 </script>
 @endpush
