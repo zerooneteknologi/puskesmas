@@ -13,7 +13,7 @@ class PasienController extends Controller
      */
     public function index()
     {
-        $pasiens = Pasien::all()->load('notes');
+        $pasiens = Pasien::latest()->get();
         return view('pasien.index', compact('pasiens'));
     }
 
@@ -23,7 +23,7 @@ class PasienController extends Controller
     public function create()
     {
         return view('pasien.table', [
-            'pasiens' => Pasien::all()->load('notes'),
+            'pasiens' => Pasien::latest()->get(),
         ]);
     }
 
@@ -95,7 +95,9 @@ class PasienController extends Controller
      */
     public function filter(Request $request)
     {
-        $pasiens = Pasien::filter($request)->get();
+        $pasiens = Pasien::latest()
+            ->filter($request)
+            ->get();
 
         return view('pasien.table', [
             'pasiens' => $pasiens,

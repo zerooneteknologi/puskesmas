@@ -73,7 +73,7 @@
 
         <div class="table-responsive">
             <!-- Table with stripped rows -->
-            <table class="table datatable table-hover" id="pasienTable">
+            <table class="table table-hover" id="pasienTable">
                 <thead>
                     <tr>
                         <th>
@@ -81,8 +81,8 @@
                         </th>
                         <th>Nama</th>
                         <th>Nomor</th>
-                        <th>Potongan (%)</th>
-                        <th>Jumlah</th>
+                        <th>Potongan (Rp)</th>
+                        <th>Jumlah (Rp)</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -92,22 +92,17 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $pasien->pasien_name }}</td>
                         <td>{{ $pasien->pasien_nomor }}</td>
-                        <td>{{ $pasien->pasien_discount }}</td>
+                        <td style="text-align: right">{{ number_format($pasien->pasien_discount, 0, ",", ".") }}</td>
 
                         @php
-                        $price = $pasien->notes->sum('note_price') - ($pasien->notes->sum('note_price') *
-                        $pasien->pasien_discount /100);
+                        $price = $pasien->notes->sum('note_price') - $pasien->pasien_discount;
                         @endphp
-                        <td>Rp. {{ number_format($price, 2, ",",".") }}</td>
+                        <td style="text-align: right">{{ number_format($price, 0, ",", ".") }}</td>
                         <td>
                             <a href="{{ route('pasien.show', $pasien->id)}}" target="_blank" data-bs-toggle="tooltip"
                                 data-bs-placement="top" title="rincian" class="badge bg-primary border-0"><i
                                     class="bi bi-printer me-1"></i></a>
                             @if (auth()->user()->role_id == 1)
-                            <button type="button"
-                                onclick="discount({{ $pasien->id }}, '{{ $pasien->pasien_nomor}}', '{{$pasien->pasien_name}}', '{{ $pasien->pasien_age}}', '{{ $pasien->pasien_address}}', '{{ $pasien->pasien_status}}', '{{$pasien->pasien_in}}', '{{$pasien->pasien_out}}', '{{$pasien->pasien_sum}}', '{{$pasien->pasien_room}}', '{{$pasien->pasien_diagnoses}}', '{{ $pasien->pasien_discount}}')"
-                                data-bs-toggle="tooltip" data-bs-placement="top" title="edit"
-                                class="badge bg-warning border-0"><i class="bi bi-pencil-square me-1"></i></button>
                             <form action="{{ route('pasien.destroy', $pasien->id)}}" method="POST" class="d-inline">
                                 @csrf
                                 <input type="hidden" name="_method" value="DELETE">
@@ -129,50 +124,6 @@
     </div>
 </section>
 
-<!-- Vertically centered Modal -->
-<div class="modal fade" id="modaldiscount" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Tambah Dikon</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-
-                @if ($pasiens->count() !== 0)
-                <!-- Horizontal Form -->
-                <form action="{{ route('pasien.update', $pasien->id)}}" method="POST">
-                    @csrf
-                    <input type="hidden" name="_method" value="PUT">
-                    <input type="hidden" class="form-control" id="pasien_id" name="pasien_id">
-                    <input type="hidden" class="form-control" id="pasien_nomor" name="pasien_nomor">
-                    <input type="hidden" class="form-control" id="pasien_name" name="pasien_name">
-                    <input type="hidden" class="form-control" id="pasien_age" name="pasien_age">
-                    <input type="hidden" class="form-control" id="pasien_address" name="pasien_address">
-                    <input type="hidden" class="form-control" id="pasien_status" name="pasien_status">
-                    <input type="hidden" class="form-control" id="pasien_in" name="pasien_in">
-                    <input type="hidden" class="form-control" id="pasien_out" name="pasien_out">
-                    <input type="hidden" class="form-control" id="pasien_sum" name="pasien_sum">
-                    <input type="hidden" class="form-control" id="pasien_room" name="pasien_room">
-                    <input type="hidden" class="form-control" id="pasien_diagnoses" name="pasien_diagnoses">
-                    <div class="row mb-3">
-                        <label for="pasien_discount" class="col-sm-2 col-form-label">Diskon</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pasien_discount" name="pasien_discount">
-                        </div>
-                    </div>
-                    <div class="text-center">
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Tambah diskon</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-            </form><!-- End Horizontal Form -->
-            @endif
-        </div>
-    </div>
-</div><!-- End Vertically centered Modal-->
 
 @endsection
 
@@ -219,22 +170,6 @@
         }
     });
 
-    function discount(id, nomor, name, age, address, status, pasienIn, out, sum, room, diagnoses, discount) {
-            $('#pasien_id').val(id);
-            $('#pasien_nomor').val(nomor);
-            $('#pasien_name').val(name);
-            $('#pasien_age').val(age);
-            $('#pasien_address').val(address);
-            $('#pasien_status').val(status);
-            $('#pasien_in').val(pasienIn);
-            $('#pasien_out').val(out);
-            $('#pasien_sum').val(sum);
-            $('#pasien_room').val(room);
-            $('#pasien_diagnoses').val(diagnoses);
-            $('#pasien_discount').val(discount);
-            $('#modaldiscount').modal('show');
-        }
-
     let filterTimeout;
 
     $('#filter').on('change', function() {
@@ -269,7 +204,5 @@
     }
 
     $('#date, #month, #year').on('change input', filter);
-
-    
 </script>
 @endpush

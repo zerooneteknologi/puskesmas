@@ -123,7 +123,18 @@
             <p>Email : blud.pkmcisurupan@gmail.com</p>
         </div>
 
-        <h3 style="text-align: center">Rincian Biaya Perawatan</h3>
+        @php
+        $type = match (true) {
+        str_starts_with($pasien->pasien_nomor, 'A') => 'rawat jalan',
+        str_starts_with($pasien->pasien_nomor, 'B') => 'rawat inap',
+        str_starts_with($pasien->pasien_nomor, 'C') => 'Poned',
+        str_starts_with($pasien->pasien_nomor, 'D') => 'Ugd',
+        str_starts_with($pasien->pasien_nomor, 'E') => 'PUSTU',
+        default => '',
+        };
+        @endphp
+
+        <h3 style="text-align: center">Rincian Biaya Perawatan {{ Str::title($type) }}</h3>
         <div class="patient-details">
             <!-- Tabel Pertama -->
             <table>
@@ -183,7 +194,7 @@
                     <th style="width: 5%">No</th>
                     <th>Tanggal</th>
                     <th>Rincian</th>
-                    <th>Harga</th>
+                    <th>Harga (Rp)</th>
                 </tr>
                 @php
                 $groupNote = $pasien->notes->groupBy('note_category')
@@ -195,59 +206,43 @@
                     <th rowspan="{{ $notes->count() + 1}} " style="text-align: center">{{ $loop->iteration }}</th>
                     <th></th>
                     <th>
-                        @if ($category == 1)
-                        UGD
-                        @endif
-                        @if ($category == 2)
-                        Perawatan
-                        @endif
-                        @if ($category == 3)
-                        Laoratorium
-                        @endif
-                        @if ($category == 4)
-                        Tindakan
-                        @endif
-                        @if ($category == 5)
-                        Pemeriksaan Penunjang
-                        @endif
-                        @if ($category == 6)
-                        Alat Kesehatan
-                        @endif
-                        @if ($category == 7)
-                        Obat - Obatan
-                        @endif
-                        @if ($category == 8)
-                        Tindakan Kebidanan
-                        @endif
-                        @if ($category == 9)
-                        Tindakan Gigi
-                        @endif
+                        {{ [
+                        1 => 'UGD',
+                        2 => 'Perawatan',
+                        3 => 'Laboratorium',
+                        4 => 'Tindakan',
+                        5 => 'Pemeriksaan Penunjang',
+                        6 => 'Alat Kesehatan',
+                        7 => 'Obat - Obatan',
+                        8 => 'Tindakan Kebidanan',
+                        9 => 'Tindakan Gigi'
+                        ][$category] ?? '-' }}
                     </th>
-                    <th>Rp. {{ number_format($notes->sum('note_price'),2,",",".") }}</th>
+                    <th style="text-align: right">{{ number_format($notes->sum('note_price'),0,",",".") }}</th>
                 </tr>
                 @foreach ($notes as $note)
                 <tr>
                     <td>{{ $note->note_date }}</td>
                     <td>{{ $note->note_name}}</td>
-                    <td>Rp. {{ number_format($note->note_price, 2, ",",".") }}</td>
+                    <td style="text-align: right">{{ number_format($note->note_price, 0, ",",".") }}</td>
                 </tr>
                 @endforeach
                 @endforeach
                 <tr>
                     <th colspan="3" style="text-align: right;">Jumlah</th>
-                    <th>Rp. {{ number_format($pasien->notes->sum('note_price'), 2, ",",".")}}</th>
+                    <th style="text-align: right;">{{ number_format($pasien->notes->sum('note_price'), 0, ",",".")}}
+                    </th>
                 </tr>
                 <tr>
-                    <td colspan="3" style="text-align: right">Diskon (%)</td>
-                    <td>{{ $pasien->pasien_discount}}</td>
+                    <td colspan="3" style="text-align: right">Diskon</td>
+                    <td style="text-align: right;">{{ number_format($pasien->pasien_discount, 0, ",",".")}}</td>
                 </tr>
                 @php
-                $price = $pasien->notes->sum('note_price') - ($pasien->notes->sum('note_price') *
-                $pasien->pasien_discount /100);
+                $price = $pasien->notes->sum('note_price') - $pasien->pasien_discount;
                 @endphp
                 <tr>
                     <th colspan="3" style="text-align: right">Total</th>
-                    <th>Rp. {{ number_format($price, 2, ",",".") }}</th>
+                    <th style="text-align: right;">{{ number_format($price, 0, ",",".") }}</th>
                 </tr>
             </table>
         </div>
@@ -258,11 +253,6 @@
             $signatur = getSignatur();
             @endphp
             <table>
-                <tr>
-                    <td colspan="2">
-                        <p style="text-align: right">Cisurupan, {{ now()->translatedFormat('d F Y') }}</p>
-                    </td>
-                </tr>
                 <tr>
                     <td>
                         <p style="text-align: center">Petugas,</p>
@@ -317,7 +307,7 @@
             <div class="thin-line"></div>
         </div>
 
-        <h2 style="text-align: center">KWITANSI PEMBAYARAN PELAYANAN PASIEN</h2>
+        <h2 style="text-align: center">KWITANSI PEMBAYARAN PELAYANAN PASIEN {{ Str::upper($type) }}</h2>
         <div class="patient-details">
             <!-- Tabel Pertama -->
             <table>
@@ -351,7 +341,7 @@
         <div class="billing-details">
             <table>
                 <tr>
-                    <th colspan="3" style="text-align: center">Rincian Biaya</th>
+                    <th colspan="3" style="text-align: center">Rincian Biaya (Rp)</th>
                 </tr>
                 @php
                 $groupNote = $pasien->notes->groupBy('note_category')
@@ -362,45 +352,32 @@
                 <tr>
                     <td style="width: 5%">{{ $loop->iteration }}</td>
                     <td>
-                        @if ($category == 1)
-                        UGD
-                        @endif
-                        @if ($category == 2)
-                        Perawatan
-                        @endif
-                        @if ($category == 3)
-                        Laoratorium
-                        @endif
-                        @if ($category == 4)
-                        Tindakan
-                        @endif
-                        @if ($category == 5)
-                        Pemeriksaan Penunjang
-                        @endif
-                        @if ($category == 6)
-                        Alat Kesehatan
-                        @endif
-                        @if ($category == 7)
-                        Obat - Obatan
-                        @endif
-                        @if ($category == 8)
-                        Tindakan Kebidanan
-                        @endif
+                        {{ [
+                        1 => 'UGD',
+                        2 => 'Perawatan',
+                        3 => 'Laboratorium',
+                        4 => 'Tindakan',
+                        5 => 'Pemeriksaan Penunjang',
+                        6 => 'Alat Kesehatan',
+                        7 => 'Obat - Obatan',
+                        8 => 'Tindakan Kebidanan'
+                        ][$category] ?? '-' }}
                     </td>
-                    <td>Rp. {{ number_format($notes->sum('note_price'),2,",",".") }}</td>
+                    <td style="text-align: right;">{{ number_format($notes->sum('note_price'),0,",",".") }}</td>
                 </tr>
                 @endforeach
                 <tr>
                     <th colspan="2">Jumlah</th>
-                    <th>Rp. {{ number_format($pasien->notes->sum('note_price'), 2, ",",".")}}</th>
+                    <th style="text-align: right;">{{ number_format($pasien->notes->sum('note_price'), 0, ",",".")}}
+                    </th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: right">Diskon (%)</td>
-                    <td>{{ $pasien->pasien_discount}}</td>
+                    <td colspan="2" style="text-align: right">Diskon</td>
+                    <td style="text-align: right;">{{ number_format($pasien->pasien_discount, 0, ",",".")}}</td>
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: right">Total</td>
-                    <th>Rp. {{ number_format($price, 2, ",",".") }}</th>
+                    <th style="text-align: right;">{{ number_format($price, 0, ",",".") }}</th>
                 </tr>
                 <tr>
                     <th style="border: none">Terbilang</th>
@@ -412,11 +389,6 @@
         <div class="patient-details">
             <!-- Tabel Pertama -->
             <table>
-                <tr>
-                    <td colspan="2">
-                        <p style="text-align: right">Cisurupan, {{ now()->translatedFormat('d F Y') }}</p>
-                    </td>
-                </tr>
                 <tr>
                     <td>
                         <p style="text-align: center">Penerima,</p>
@@ -441,8 +413,8 @@
 
     <script>
         $('#backToTopBtn').on('click', function(){
-    		$('.page').printThis();
-    	})
+            $('.page').printThis();
+        })
     </script>
 
 </body>
