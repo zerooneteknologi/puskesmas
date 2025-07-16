@@ -58,13 +58,11 @@
     </div>
 
     {{-- Search Input --}}
-    @if (request()->unit == 'b')
     <div class="input-group search-container">
         <input type="text" class="form-control rounded-pill" placeholder="Cari pasien..." id="searchInput"
             autocomplete="off" data-bs-toggle="dropdown" aria-expanded="false" name="search">
         <ul class="dropdown-menu w-100" id="searchResults" style="max-height:200px; overflow-y:auto;"></ul>
     </div>
-    @endif
 
 </div><!-- End Page Title -->
 
