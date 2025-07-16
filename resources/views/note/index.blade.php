@@ -48,7 +48,17 @@
 <!-- Page Title -->
 <div class="pagetitle d-flex justify-content-between align-items-center">
     <div>
-        <h1>Nota Pembayaran</h1>
+        @php
+        switch (request()->unit) {
+        case 'a': $title = 'Rawat Jalan'; break;
+        case 'b': $title = 'Rawat Inap'; break;
+        case 'c': $title = 'PONED'; break;
+        case 'd': $title = 'UGD'; break;
+        case 'e': $title = 'PUSTU'; break;
+        default: $title = '';
+        }
+        @endphp
+        <h1>Nota Pembayaran {{ $title }}</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
@@ -223,6 +233,24 @@
                 </div>
             </div>
         </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Potongan</h5>
+                <div class="row">
+                    {{-- diskon --}}
+                    <label for="pasien_discount" class="form-label col-md-4">
+                        Potongan (Rp)
+                    </label>
+                    <div class="col-md-8">
+                        <input type="hidden" id="pasien_discount" name="pasien_discount">
+                        <input type="text" class="form-control" id="numberDiscount">
+                        <span class="invalid-feedback">Mohon Diisi</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         @if (request()->unit != 'c')
         <div class="card">
@@ -641,7 +669,7 @@
                     <input type="hidden" name="category" id="note_category">
 
                     <div class="row mb-3">
-                        <label for="name" class="col-sm-3 col-form-label">Nama</label>
+                        <label for="name" class="col-sm-3 col-form-label">Nama Tindakan</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="note_name" name="name" required>
                         </div>
@@ -673,31 +701,31 @@
     /**
     * format number
     */
-    const number = document.getElementById('note_price');
-    const input = document.getElementById('numberInput');
-    
-    input.addEventListener('input', function (e) {
-        // Ambil nilai input dan hapus semua karakter non-digit
-        let value = e.target.value.replace(/[^0-9]/g, '');
-        // number.value(value)
+    function current(inputElement, inputType, elementId) {
+        // Hapus semua karakter non-digit
+        let value = inputElement.replace(/[^0-9]/g, '');
         // Ubah string angka menjadi number
         let numberValue = parseFloat(value);
-        
         // Format angka dengan pemisah ribuan
         let formattedValue = new Intl.NumberFormat().format(numberValue);
-        
-        // Set nilai input ke format yang sudah diformat
-        e.target.value = formattedValue;
-        
-        let rawValue = input.value.replace(/[^0-9]/g, ''); // Hapus koma dan karakter non-digit
-        
-        if (!rawValue || isNaN(rawValue)) {
-        alert('Input harus berupa angka!');
-        return; // Hentikan proses
-        }
-        let numberFormat = parseFloat(rawValue); // Konversi ke number
-        number.value = numberFormat;
+        //set value input
+        $('#' + elementId).val(value);
+        //set value input format
+        $('#' + inputType).val(formattedValue);
+        // Update input field with formatted value
+        $('#' + inputType).val(formattedValue);
+    }
+
+    // format discount
+    $('#numberDiscount').on('input', function () {
+        current($('#numberDiscount').val(), 'numberDiscount', 'pasien_discount');
     });
+
+    // format price
+    $('#numberInput').on('input', function () {
+        current($('#numberInput').val(), 'numberInput', 'note_price');
+    });
+    
 
     /**
     * show modal create tabel rincian
@@ -714,8 +742,6 @@
 
     /**
      * check category
-     * @param {int} category
-     * @param {string} data
      */
     function checkCategory(category, data) {
         if (category == 1) {
@@ -749,9 +775,6 @@
     
     /**
      * add bill
-     * @param {int} category
-     * @param {string} name
-     * @param {int} price
      */
     function emergency(category, name, price) {
         var button = $(event.target).closest('button');
@@ -797,10 +820,6 @@
 
     /**
      * remove bill
-     * @param {int} id
-     * @param {int} category
-     * @param {string} name
-     * @param {int} price
      */
     function removeBill(id, category, name, price) {
         $.ajax({
@@ -855,7 +874,6 @@
     })
     /**
      * validasi form
-     * @returns {boolean}
      */ 
     function validasiForm() {
         let fields = [
@@ -907,10 +925,10 @@
         });
     
         if (errors.length > 0) {
-        alert(errors.join('\n')); // Tampilkan semua pesan error dalam satu alert
-        if (fieldKosongPertama) {
-        $(fieldKosongPertama).focus(); // Fokuskan ke field pertama yang kosong
-        }
+            alert(errors.join('\n')); // Tampilkan semua pesan error dalam satu alert
+            if (fieldKosongPertama) {
+                $(fieldKosongPertama).focus(); // Fokuskan ke field pertama yang kosong
+            }
         return false; // Mencegah pengiriman form jika ada error
         }
     

@@ -67,6 +67,7 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
+        // dd(request()->all());
         // Validatte nomor pasien
         if ($request->pasien_nomor) {
             $nomor = $request->pasien_nomor;
@@ -94,9 +95,11 @@ class NoteController extends Controller
                 'pasien_out' => $request->pasien_out,
                 'pasien_sum' => $request->pasien_sum,
                 'pasien_room' => $request->pasien_room,
+                'pasien_discount' => $request->pasien_discount,
                 'pasien_diagnoses' => $request->pasien_diagnoses,
             ]
         );
+
         $pasienId = $pasien->id;
 
         foreach ($request->note_category as $key => $cartegory) {
