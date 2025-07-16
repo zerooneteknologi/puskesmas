@@ -22,9 +22,9 @@
                 @csrf
 
                 <div class="row mb-3">
-                    <label for="pasien_status" class="form-label col-md-4">Level akun</label>
+                    <label for="pasien_status" class="col-md-4 col-form-label text-md-end">Level akun</label>
                     <div class="col-md-8">
-                        <select class="form-select" id="pasien_status" name="pasien_status" required>
+                        <select class="form-select" id="pasien_status" name="role_id" required>
                             <option selected disabled value="">Pilih status</option>
                             <option value="1">Admin</option>
                             <option value="2">User</option>
